@@ -1,0 +1,186 @@
+
+> makeup@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Shubham\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Shubham\Downloads\makeup\package-lock.json
+
+▲ Next.js 16.2.4 (Turbopack)
+
+  Creating an optimized production build ...
+Error: Cannot apply unknown utility class `bg-background`
+    [2m[at onInvalidCandidate (C:\Users\Shubham\Downloads\makeup\node_modules\tailwindcss\dist\lib.js:21:1511)][0m
+    [2m[at Ne (C:\Users\Shubham\Downloads\makeup\node_modules\tailwindcss\dist\lib.js:16:38252)][0m
+    [2m[at C:\Users\Shubham\Downloads\makeup\node_modules\tailwindcss\dist\lib.js:21:355][0m
+    [2m[at Ur (C:\Users\Shubham\Downloads\makeup\node_modules\tailwindcss\dist\lib.js:3:1733)][0m
+    [2m[at I (C:\Users\Shubham\Downloads\makeup\node_modules\tailwindcss\dist\lib.js:3:1377)][0m
+    [2m[at Ee (C:\Users\Shubham\Downloads\makeup\node_modules\tailwindcss\dist\lib.js:21:172)][0m
+    [2m[at vn (C:\Users\Shubham\Downloads\makeup\node_modules\tailwindcss\dist\lib.js:38:294)][0m
+    [2m[at async kn (C:\Users\Shubham\Downloads\makeup\node_modules\tailwindcss\dist\lib.js:38:631)][0m
+    [2m[at async Xr (C:\Users\Shubham\Downloads\makeup\node_modules\@tailwindcss\node\dist\index.js:10:3415)][0m
+    [2m[at async E (C:\Users\Shubham\Downloads\makeup\node_modules\@tailwindcss\postcss\dist\index.js:10:3979)][0m
+
+> Build error occurred
+Error: Turbopack build failed with 7 errors:
+./Downloads/makeup/src/app/globals.css
+Error evaluating Node.js code
+CssSyntaxError: tailwindcss: C:\Users\Shubham\Downloads\makeup\src\app\globals.css:1:1: Cannot apply unknown utility class `bg-background`
+    at Input.error (Downloads/makeup/node_modules/postcss/lib/input.js:135:16) [C:\Users\Shubham\Downloads\makeup\.next\build\chunks\0rm8_0ofxzlz._.js:4667:22]
+    at error (Downloads/makeup/node_modules/postcss/lib/node.js:146:32) [C:\Users\Shubham\Downloads\makeup\.next\build\chunks\0rm8_0ofxzlz._.js:943:38]
+    [at Object.Once (C:\Users\Shubham\Downloads\makeup\node_modules\@tailwindcss\postcss\dist\index.js:10:6913)]
+    at async LazyResult.runAsync (Downloads/makeup/node_modules/postcss/lib/lazy-result.js:293:11) [C:\Users\Shubham\Downloads\makeup\.next\build\chunks\0rm8_0ofxzlz._.js:6230:21]
+    at async transform (turbopack:///[turbopack-node]/transforms/postcss.ts:70:34) [C:\Users\Shubham\Downloads\makeup\.next\build\chunks\[root-of-the-server]__08holdc._.js:146:36]
+    at async run (turbopack:///[turbopack-node]/child_process/evaluate.ts:89:23) [C:\Users\Shubham\Downloads\makeup\.next\build\chunks\[root-of-the-server]__0ml_841._.js:443:31]
+
+Import trace:
+  Client Component Browser:
+    ./Downloads/makeup/src/app/globals.css [Client Component Browser]
+    ./Downloads/makeup/src/app/layout.js [Server Component]
+
+
+./Downloads/makeup/src/app/contact/page.js:5:1
+Export Facebook doesn't exist in target module
+  [90m3 |[0m [36mimport[0m axios [36mfrom[0m [32m"axios"[0m;
+  [90m4 |[0m [36mimport[0m { toast } [36mfrom[0m [32m"sonner"[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m { [33mMail[0m, [33mPhone[0m, [33mMapPin[0m, [33mInstagram[0m, [33mFacebook[0m } [36mfrom[0m [32m"lucide-react"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mimport[0m { [33mSTUDIO[0m } [36mfrom[0m [32m"@/lib/data"[0m;
+  [90m7 |[0m [36mimport[0m [33mHeading[0m [36mfrom[0m [32m"@/components/Heading"[0m;
+  [90m8 |[0m [36mimport[0m [33mPrimaryButton[0m [36mfrom[0m [32m"@/components/PrimaryButton"[0m;
+
+The export Facebook was not found in module [project]/Downloads/makeup/node_modules/lucide-react/dist/esm/lucide-react.js [app-client] (ecmascript).
+Did you mean to import Webhook?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./Downloads/makeup/src/app/contact/page.js [Client Component Browser]
+    ./Downloads/makeup/src/app/contact/page.js [Server Component]
+
+  Client Component SSR:
+    ./Downloads/makeup/src/app/contact/page.js [Client Component SSR]
+    ./Downloads/makeup/src/app/contact/page.js [Server Component]
+
+
+./Downloads/makeup/src/app/contact/page.js:5:1
+Export Facebook doesn't exist in target module
+  [90m3 |[0m [36mimport[0m axios [36mfrom[0m [32m"axios"[0m;
+  [90m4 |[0m [36mimport[0m { toast } [36mfrom[0m [32m"sonner"[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m { [33mMail[0m, [33mPhone[0m, [33mMapPin[0m, [33mInstagram[0m, [33mFacebook[0m } [36mfrom[0m [32m"lucide-react"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mimport[0m { [33mSTUDIO[0m } [36mfrom[0m [32m"@/lib/data"[0m;
+  [90m7 |[0m [36mimport[0m [33mHeading[0m [36mfrom[0m [32m"@/components/Heading"[0m;
+  [90m8 |[0m [36mimport[0m [33mPrimaryButton[0m [36mfrom[0m [32m"@/components/PrimaryButton"[0m;
+
+The export Facebook was not found in module [project]/Downloads/makeup/node_modules/lucide-react/dist/esm/lucide-react.js [app-ssr] (ecmascript).
+Did you mean to import Webhook?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./Downloads/makeup/src/app/contact/page.js [Client Component Browser]
+    ./Downloads/makeup/src/app/contact/page.js [Server Component]
+
+  Client Component SSR:
+    ./Downloads/makeup/src/app/contact/page.js [Client Component SSR]
+    ./Downloads/makeup/src/app/contact/page.js [Server Component]
+
+
+./Downloads/makeup/src/components/Footer.jsx:2:1
+Export Facebook doesn't exist in target module
+  [90m1 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m"next/link"[0m;
+[31m[1m>[0m [90m2 |[0m [36mimport[0m { [33mInstagram[0m, [33mFacebook[0m, [33mMail[0m, [33mPhone[0m, [33mMapPin[0m } [36mfrom[0m [32m"lucide-react"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m [36mimport[0m { [33mSTUDIO[0m, [33mSERVICES[0m } [36mfrom[0m [32m"@/lib/data"[0m;
+  [90m4 |[0m
+  [90m5 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mFooter[0m() {
+
+The export Facebook was not found in module [project]/Downloads/makeup/node_modules/lucide-react/dist/esm/lucide-react.js [app-rsc] (ecmascript).
+Did you mean to import Webhook?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  Server Component:
+    ./Downloads/makeup/src/components/Footer.jsx
+    ./Downloads/makeup/src/app/layout.js
+
+
+./Downloads/makeup/src/app/contact/page.js:5:1
+Export Instagram doesn't exist in target module
+  [90m3 |[0m [36mimport[0m axios [36mfrom[0m [32m"axios"[0m;
+  [90m4 |[0m [36mimport[0m { toast } [36mfrom[0m [32m"sonner"[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m { [33mMail[0m, [33mPhone[0m, [33mMapPin[0m, [33mInstagram[0m, [33mFacebook[0m } [36mfrom[0m [32m"lucide-react"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mimport[0m { [33mSTUDIO[0m } [36mfrom[0m [32m"@/lib/data"[0m;
+  [90m7 |[0m [36mimport[0m [33mHeading[0m [36mfrom[0m [32m"@/components/Heading"[0m;
+  [90m8 |[0m [36mimport[0m [33mPrimaryButton[0m [36mfrom[0m [32m"@/components/PrimaryButton"[0m;
+
+The export Instagram was not found in module [project]/Downloads/makeup/node_modules/lucide-react/dist/esm/lucide-react.js [app-client] (ecmascript).
+Did you mean to import Star?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./Downloads/makeup/src/app/contact/page.js [Client Component Browser]
+    ./Downloads/makeup/src/app/contact/page.js [Server Component]
+
+  Client Component SSR:
+    ./Downloads/makeup/src/app/contact/page.js [Client Component SSR]
+    ./Downloads/makeup/src/app/contact/page.js [Server Component]
+
+
+./Downloads/makeup/src/app/contact/page.js:5:1
+Export Instagram doesn't exist in target module
+  [90m3 |[0m [36mimport[0m axios [36mfrom[0m [32m"axios"[0m;
+  [90m4 |[0m [36mimport[0m { toast } [36mfrom[0m [32m"sonner"[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m { [33mMail[0m, [33mPhone[0m, [33mMapPin[0m, [33mInstagram[0m, [33mFacebook[0m } [36mfrom[0m [32m"lucide-react"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mimport[0m { [33mSTUDIO[0m } [36mfrom[0m [32m"@/lib/data"[0m;
+  [90m7 |[0m [36mimport[0m [33mHeading[0m [36mfrom[0m [32m"@/components/Heading"[0m;
+  [90m8 |[0m [36mimport[0m [33mPrimaryButton[0m [36mfrom[0m [32m"@/components/PrimaryButton"[0m;
+
+The export Instagram was not found in module [project]/Downloads/makeup/node_modules/lucide-react/dist/esm/lucide-react.js [app-ssr] (ecmascript).
+Did you mean to import Star?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./Downloads/makeup/src/app/contact/page.js [Client Component Browser]
+    ./Downloads/makeup/src/app/contact/page.js [Server Component]
+
+  Client Component SSR:
+    ./Downloads/makeup/src/app/contact/page.js [Client Component SSR]
+    ./Downloads/makeup/src/app/contact/page.js [Server Component]
+
+
+./Downloads/makeup/src/components/Footer.jsx:2:1
+Export Instagram doesn't exist in target module
+  [90m1 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m"next/link"[0m;
+[31m[1m>[0m [90m2 |[0m [36mimport[0m { [33mInstagram[0m, [33mFacebook[0m, [33mMail[0m, [33mPhone[0m, [33mMapPin[0m } [36mfrom[0m [32m"lucide-react"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m3 |[0m [36mimport[0m { [33mSTUDIO[0m, [33mSERVICES[0m } [36mfrom[0m [32m"@/lib/data"[0m;
+  [90m4 |[0m
+  [90m5 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mFooter[0m() {
+
+The export Instagram was not found in module [project]/Downloads/makeup/node_modules/lucide-react/dist/esm/lucide-react.js [app-rsc] (ecmascript).
+Did you mean to import Star?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import trace:
+  Server Component:
+    ./Downloads/makeup/src/components/Footer.jsx
+    ./Downloads/makeup/src/app/layout.js
+
+
+    at async transform (turbopack:///[turbopack-node]/transforms/postcss.ts:70:34) [C:\Users\Shubham\Downloads\makeup\.next\build\chunks\[root-of-the-server]__08holdc._.js:146:36])
+    at async run (turbopack:///[turbopack-node]/child_process/evaluate.ts:89:23) [C:\Users\Shubham\Downloads\makeup\.next\build\chunks\[root-of-the-server]__0ml_841._.js:443:31])
+    at <unknown> (./Downloads/makeup/src/app/contact/page.js:5:1)
+    at <unknown> (./Downloads/makeup/src/app/contact/page.js:5:1)
+    at <unknown> (./Downloads/makeup/src/components/Footer.jsx:2:1)
+    at <unknown> (./Downloads/makeup/src/app/contact/page.js:5:1)
+    at <unknown> (./Downloads/makeup/src/app/contact/page.js:5:1)
+    at <unknown> (./Downloads/makeup/src/components/Footer.jsx:2:1)
