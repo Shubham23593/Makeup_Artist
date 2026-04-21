@@ -5,6 +5,7 @@ import axios from "axios";
 import { HERO_IMAGE, SERVICES, PORTFOLIO, STUDIO, ARTIST } from "@/lib/data";
 import Heading from "@/components/Heading";
 import PrimaryButton from "@/components/PrimaryButton";
+import SliderPage from "@/components/CrazyComponents/tsx/SliderPage";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 
@@ -17,49 +18,9 @@ export default function Home() {
 
   return (
     <div data-testid="home-page">
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-[#FBF9F6]">
-        <div className="ed-container pt-14 md:pt-20 pb-20 md:pb-32 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-end">
-          <div className="lg:col-span-6 fade-up">
-            <div className="flex items-center gap-4 mb-8">
-              <span className="gold-rule" />
-              <span className="label-xs">Est. 2019 · Mumbai</span>
-            </div>
-            
-            <Heading 
-              as="h1"
-              title='Makeup <em class="not-italic text-[#C8A97E]">in quiet</em><br /> conversation<br /> with skin.'
-            />
-            
-            <p className="mt-8 max-w-md text-[17px] leading-relaxed text-[#6B635E]">
-              A couture atelier led by {ARTIST.name}. We build makeup that feels private, considered, and unmistakably yours — for brides, editorials, and the evenings you'll remember.
-            </p>
-            <div className="flex flex-wrap items-center gap-4 mt-10">
-              <PrimaryButton href="/booking" testId="hero-book-now-btn">
-                Book Now <ArrowUpRight size={16} />
-              </PrimaryButton>
-              <PrimaryButton href="/portfolio" outline testId="hero-portfolio-btn">
-                View Portfolio
-              </PrimaryButton>
-            </div>
-
-            <div className="mt-16 grid grid-cols-3 gap-6 max-w-lg border-t border-[#2A2522]/10 pt-8">
-              <div><div className="font-serif text-3xl text-[#2A2522]">{ARTIST.weddings}</div><div className="label-xs mt-1">Brides</div></div>
-              <div><div className="font-serif text-3xl text-[#2A2522]">{ARTIST.editorials}</div><div className="label-xs mt-1">Editorials</div></div>
-              <div><div className="font-serif text-3xl text-[#2A2522]">{ARTIST.experience}</div><div className="label-xs mt-1">Experience</div></div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-6 relative">
-            <div className="hover-zoom aspect-[4/5] bg-[#F3EBE5]">
-              <img src={HERO_IMAGE} alt="Editorial bridal makeup" className="w-full h-full object-cover" />
-            </div>
-            <div className="hidden md:block absolute -left-8 bottom-10 bg-[#FBF9F6] border border-[#C8A97E] px-6 py-4 shadow-sm">
-              <div className="label-xs !text-[#C8A97E]">Featured in</div>
-              <div className="font-serif text-xl text-[#2A2522] mt-1">Vogue India · Harper's Bazaar</div>
-            </div>
-          </div>
-        </div>
+      {/* HERO SLIDER */}
+      <section className="relative overflow-hidden w-full h-screen">
+        <SliderPage />
       </section>
 
       {/* SERVICES PREVIEW */}

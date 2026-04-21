@@ -34,8 +34,8 @@ export const SERVICES = [
     includes: ["Glow base", "Custom eye design", "Signature lip", "Set with fine mist"],
   },
   {
-    slug: "engagement",
-    title: "Engagement Makeup",
+    slug: "baby-shower",
+    title: "Baby Shower",
     tagline: "Soft, romantic, unmistakably you.",
     description:
       "Dewy, romantic makeup for the day you become a fiancée. Gentle sculpting, a flushed cheek, and a lip tailored to your outfit palette.",
@@ -51,18 +51,27 @@ export const SERVICES = [
     image: "https://images.unsplash.com/photo-1470665467484-d66d308ce545?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1Mjh8MHwxfHNlYXJjaHw0fHxicmlkYWwlMjBtYWtldXAlMjBlZGl0b3JpYWx8ZW58MHx8fHwxNzc2NzgwODQ2fDA&ixlib=rb-4.1.0&q=85",
     includes: ["Pore-refining base", "HD powder finish", "Invisible contour", "On-set touch-ups"],
   },
-  {
-    slug: "airbrush",
-    title: "Airbrush Makeup",
-    tagline: "An impossibly seamless, luminous finish.",
-    description:
-      "Micro-fine droplets build a second-skin finish that lasts twelve hours. Perfect for humid climates, outdoor ceremonies, and non-stop days.",
-    image: "https://images.pexels.com/photos/32321496/pexels-photo-32321496.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    includes: ["Airbrush base", "Colour-matched foundation", "Set & seal", "12-hour wear"],
-  },
+  // {
+  //   slug: "airbrush",
+  //   title: "Airbrush Makeup",
+  //   tagline: "An impossibly seamless, luminous finish.",
+  //   description:
+  //     "Micro-fine droplets build a second-skin finish that lasts twelve hours. Perfect for humid climates, outdoor ceremonies, and non-stop days.",
+  //   image: "https://images.pexels.com/photos/32321496/pexels-photo-32321496.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+  //   includes: ["Airbrush base", "Colour-matched foundation", "Set & seal", "12-hour wear"],
+  // },
   {
     slug: "photoshoot",
-    title: "Photoshoot Makeup",
+    title: "Pre-Weeding Makeup",
+    tagline: "Editorial-grade artistry for the camera.",
+    description:
+      "Concept-led makeup for campaigns, lookbooks, and portraits. A collaboration with your stylist and photographer to build a look that sings on screen.",
+    image: "https://images.pexels.com/photos/35983908/pexels-photo-35983908.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+    includes: ["Concept consult", "On-set changes", "Backup kit", "Digital mood board"],
+  },
+  {
+    slug: "engagement",
+    title: "Engagement Makeup",
     tagline: "Editorial-grade artistry for the camera.",
     description:
       "Concept-led makeup for campaigns, lookbooks, and portraits. A collaboration with your stylist and photographer to build a look that sings on screen.",
