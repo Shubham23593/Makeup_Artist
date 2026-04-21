@@ -37,9 +37,7 @@ export default function Navbar() {
     >
       <div className="ed-container flex items-center justify-between py-5">
         <Link href="/" data-testid="nav-logo" className="flex items-center gap-3 group">
-          <span className="font-serif text-2xl tracking-tight leading-none text-[#2A2522]">
-            Maison <em className="not-italic text-[#C8A97E]">Lumière</em>
-          </span>
+          <img src="/logo.png" alt="Deepali Makeup Artist" className="h-12 md:h-16 w-auto object-contain mix-blend-multiply" />
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
@@ -60,13 +58,15 @@ export default function Navbar() {
           })}
         </nav>
 
-        <PrimaryButton
-          href="/booking"
-          testId="nav-book-now-btn"
-          className="hidden lg:inline-flex !py-3 !px-6"
-        >
-          Book Now
-        </PrimaryButton>
+        <div className="hidden lg:block">
+          <PrimaryButton
+            href="/booking"
+            testId="nav-book-now-btn"
+            className="!py-3 !px-6"
+          >
+            Book Now
+          </PrimaryButton>
+        </div>
 
         <button
           onClick={() => setOpen((v) => !v)}

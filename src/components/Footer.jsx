@@ -62,10 +62,10 @@ export default function Footer() {
 
       <div className="border-t border-[#FBF9F6]/10">
         <div className="ed-container py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[#FBF9F6]/50 tracking-wider uppercase">
-          <div>© {new Date().getFullYear()} Maison Lumière. All Rights Reserved.</div>
+          <div>© {new Date().getFullYear()} Deepali . All Rights Reserved.</div>
           <div className="flex items-center gap-4">
-            <Link href="/admin" className="hover:text-[#C8A97E]" data-testid="footer-admin-link">Admin</Link>
-            <span>Crafted with quiet intent</span>
+            {/* <Link href="/admin" className="hover:text-[#C8A97E]" data-testid="footer-admin-link">Admin</Link> */}
+            <span>Developed by Shubham Dalvi</span>
           </div>
         </div>
       </div>

@@ -42,8 +42,8 @@ export default function Loader({ children }) {
       <div className="loader-container fixed inset-0 z-[9999] flex flex-col justify-center items-center pointer-events-none">
         <div className="loader-curtain absolute inset-0 bg-[#2A2522] h-full w-full" />
         <div className="loader-text font-serif text-3xl sm:text-4xl text-[#C8A97E] tracking-widest relative z-10 flex gap-4 overflow-hidden">
-          <span className="loader-text-inner translate-y-full opacity-0 inline-block">Maison</span>
-          <span className="loader-text-inner translate-y-full opacity-0 inline-block italic">Lumière</span>
+          <span className="loader-text-inner translate-y-full opacity-0 inline-block">Deepali</span>
+          <span className="loader-text-inner translate-y-full opacity-0 inline-block italic">Makeup Artist</span>
         </div>
       </div>
       
