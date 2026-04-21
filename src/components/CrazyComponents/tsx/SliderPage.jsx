@@ -653,33 +653,33 @@ export default function SliderPage() {
         </div> */}
 
         {/* Slide Counter */}
-        <span className="absolute top-1/2 left-4 md:left-8 -translate-y-1/2 font-mono text-xs font-semibold tracking-widest uppercase">
+        <span className="absolute top-1/2 left-4 md:left-8 -translate-y-1/2 font-mono text-xs font-semibold tracking-widest uppercase text-[#2A2522]">
           {String(activeSlide + 1).padStart(2, "0")}
         </span>
 
         {/* Navigation */}
-        <nav className="slides-navigation absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-8 flex gap-0 pointer-events-auto">
+        <nav className="slides-navigation absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-8 flex gap-2 md:gap-4 pointer-events-auto">
           {SLIDES.map((slide, idx) => (
             <div
               key={idx}
-              className={`group flex-1 flex flex-col cursor-pointer p-2 md:p-4 transition-colors ${
+              className={`group flex-1 flex flex-col cursor-pointer transition-colors ${
                 idx === activeSlide
-                  ? "text-white"
-                  : "text-white/60 hover:text-white/80"
+                  ? "text-[#2A2522]"
+                  : "text-[#2A2522]/50 hover:text-[#2A2522]/80"
               }`}
               onClick={(e) => {
                 e.stopPropagation();
                 navigateTo(idx);
               }}
             >
-              <div className="w-full h-[2px] bg-white/20 mb-2 rounded-sm overflow-hidden">
+              <div className="w-full h-[2px] bg-[#2A2522]/20 mb-2 md:mb-3 rounded-sm overflow-hidden">
                 <div
                   id={`progress-${idx}`}
-                  className="h-full bg-white w-0 transition-all duration-100 ease-linear opacity-100"
+                  className="h-full bg-[#2A2522] w-0 transition-all duration-100 ease-linear opacity-100"
                   style={{ width: idx === activeSlide ? "0%" : "0%" }}
                 />
               </div>
-              <div className="font-mono text-[10px] md:text-[11px] uppercase font-semibold tracking-wide truncate">
+              <div className="font-mono text-[9px] sm:text-[10px] lg:text-xs uppercase font-bold tracking-wider md:tracking-widest whitespace-normal break-words leading-tight">
                 {slide.title}
               </div>
             </div>
