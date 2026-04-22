@@ -7,7 +7,7 @@ import { SERVICES, STUDIO } from "@/lib/data";
 import Heading from "@/components/Heading";
 import PrimaryButton from "@/components/PrimaryButton";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+const API = "/api";
 
 const initial = { name: "", phone: "", email: "", date: "", time: "", service: "", message: "" };
 
@@ -27,15 +27,14 @@ export default function Booking() {
     setSubmitting(true);
     try {
       const { data } = await axios.post(`${API}/bookings`, form);
-      setSubmitted(data);
+      if (data.error) throw new Error(data.error);
+
+      setSubmitted({ ...form, id: data.booking._id });
       setForm(initial);
       toast.success("Reservation received — we will confirm within 24 hours.");
     } catch (err) {
-      // Allow demo submission to succeed even if API fails since there is no backend mentioned here
-      const mockData = { ...form, id: Math.random().toString(36).substr(2, 9) };
-      setSubmitted(mockData);
-      setForm(initial);
-      toast.success("Reservation received (Demo Mode) — we will confirm within 24 hours.");
+      const errMsg = err.response?.data?.error || err.message || "Failed to submit booking.";
+      toast.error(errMsg);
     } finally {
       setSubmitting(false);
     }
@@ -46,11 +45,11 @@ export default function Booking() {
       <section className="ed-container pt-16 md:pt-24 pb-12">
         <Heading 
            subtitle="Book an Appointment"
-           title='Reserve a date at <em class="not-italic text-[#C8A97E]">the atelier</em>.'
+           title='Reserve your <em class="not-italic text-[#C8A97E]">makeup appointment.</em>'
            titleClassName="text-5xl sm:text-6xl lg:text-7xl max-w-3xl"
         />
         <p className="mt-8 max-w-xl text-[#6B635E] leading-relaxed">
-          Share a few details and we will confirm availability within 24 hours. For same-week requests, please call the studio directly.
+          Share your details and we will get in touch to confirm your booking. For urgent bookings, please contact us directly.
         </p>
       </section>
 
@@ -78,15 +77,15 @@ export default function Booking() {
             <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8" data-testid="booking-form">
               <div>
                 <label className="field-label" htmlFor="b-name">Your Name *</label>
-                <input id="b-name" data-testid="booking-name" className="editorial-input" value={form.name} onChange={onChange("name")} placeholder="Aarohi Mehta" required />
+                <input id="b-name" data-testid="booking-name" className="editorial-input" value={form.name} onChange={onChange("name")} placeholder="Enter your full name" required />
               </div>
               <div>
                 <label className="field-label" htmlFor="b-phone">Phone *</label>
-                <input id="b-phone" data-testid="booking-phone" className="editorial-input" value={form.phone} onChange={onChange("phone")} placeholder="+91 98765 43210" required />
+                <input id="b-phone" data-testid="booking-phone" className="editorial-input" value={form.phone} onChange={onChange("phone")} placeholder="Enter your phone number" required />
               </div>
               <div className="md:col-span-2">
-                <label className="field-label" htmlFor="b-email">Email *</label>
-                <input id="b-email" data-testid="booking-email" type="email" className="editorial-input" value={form.email} onChange={onChange("email")} placeholder="you@example.com" required />
+                <label className="field-label" htmlFor="b-email">Email *</label>  
+                <input id="b-email" data-testid="booking-email" type="email" className="editorial-input" value={form.email} onChange={onChange("email")} placeholder="Enter your email address" required />
               </div>
               <div>
                 <label className="field-label" htmlFor="b-date">Preferred Date *</label>
@@ -94,7 +93,12 @@ export default function Booking() {
               </div>
               <div>
                 <label className="field-label" htmlFor="b-time">Preferred Time *</label>
-                <input id="b-time" data-testid="booking-time" type="time" className="editorial-input" value={form.time} onChange={onChange("time")} required />
+                <select id="b-time" data-testid="booking-time" className="editorial-input bg-transparent" value={form.time} onChange={onChange("time")} required>
+                  <option value="">Select a time</option>
+                  {["10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "01:00 PM", "01:30 PM", "02:00 PM", "02:30 PM", "03:00 PM", "03:30 PM", "04:00 PM", "04:30 PM", "05:00 PM", "05:30 PM", "06:00 PM", "06:30 PM", "07:00 PM"].map((t) => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
               </div>
               <div className="md:col-span-2">
                 <label className="field-label" htmlFor="b-service">Service *</label>
@@ -112,7 +116,7 @@ export default function Booking() {
                 <PrimaryButton as="button" type="submit" disabled={submitting} className="disabled:opacity-60" testId="booking-submit-btn">
                   {submitting ? "Sending..." : "Reserve My Date"} <ArrowUpRight size={16} />
                 </PrimaryButton>
-                <span className="text-xs text-[#6B635E] tracking-wider">A ₹2,500 consultation fee applies and is credited to your final booking.</span>
+                <span className="text-xs text-[#6B635E] tracking-wider">A ₹2,500 consultation fee is required and will be adjusted if you confirm your booking.</span>
               </div>
             </form>
           )}
@@ -121,11 +125,11 @@ export default function Booking() {
         {/* Sidebar */}
         <aside className="lg:col-span-4">
           <div className="bg-[#F3EBE5]/60 p-8 border-l-2 border-[#C8A97E]" data-testid="booking-sidebar">
-            <div className="label-xs">Studio Hours</div>
-            <ul className="mt-4 space-y-2 text-sm text-[#2A2522]">
+            {/* <div className="label-xs">Studio Hours</div> */}
+            {/* <ul className="mt-4 space-y-2 text-sm text-[#2A2522]">
               <li className="flex items-center gap-3"><Clock size={14} className="text-[#C8A97E]" /> Mon — Sat · 10:00 – 19:00</li>
               <li className="flex items-center gap-3"><Clock size={14} className="text-[#C8A97E]" /> Sun · By appointment</li>
-            </ul>
+            </ul> */}
 
             <div className="label-xs mt-8">Direct Line</div>
             <ul className="mt-4 space-y-3 text-sm text-[#2A2522]">
@@ -138,7 +142,7 @@ export default function Booking() {
           <div className="mt-8 p-8 bg-[#2A2522] text-[#FBF9F6]">
             <div className="label-xs !text-[#C8A97E]">On The Day</div>
             <p className="font-serif italic text-xl leading-snug mt-4 text-[#FBF9F6]/90">
-              Arrive with cleansed skin. We take care of everything else — coffee included.
+             Please arrive with clean and moisturized skin. We will take care of the rest to give you a perfect look.
             </p>
           </div>
         </aside>

@@ -13,7 +13,7 @@ export default function Heading({
   return (
     <div className={`flex flex-col ${align === 'center' ? 'items-center text-center' : 'items-start text-left'} ${className}`} {...props}>
       {subtitle && <span className={`label-xs ${subtitleClassName}`}>{subtitle}</span>}
-      <Component className={`font-serif tracking-tighter leading-[0.95] font-light mt-4 ${titleClassName}`} dangerouslySetInnerHTML={{__html: title}} />
+      <Component className={`font-serif tracking-tighter leading-[0.95] font-normal mt-4 max-sm:!text-[2.1rem] max-sm:!leading-[1.1] ${titleClassName}`} dangerouslySetInnerHTML={{__html: title}} />
     </div>
   );
 }

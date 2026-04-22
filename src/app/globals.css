@@ -48,6 +48,7 @@ html, body {
 }
 
 
+
 .font-serif {
     font-family: 'Cormorant Garamond', serif;
 }
@@ -75,46 +76,99 @@ html, body {
     color: var(--text-secondary);
 }
 
-.btn-primary {
+.btn-primary,
+.btn-outline {
+    position: relative;
+    overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    background: #2A2522;
-    color: #FBF9F6;
     padding: 1rem 2rem;
     font-size: 0.8125rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
     font-weight: 500;
-    transition: background 300ms ease, transform 300ms ease;
-    border: 1px solid #2A2522;
     cursor: pointer;
+    transform: translateY(0) scale(1);
+    transition:
+        background 300ms ease,
+        color 300ms ease,
+        border-color 300ms ease,
+        transform 300ms ease,
+        box-shadow 300ms ease;
 }
+
+.btn-primary::before,
+.btn-outline::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        120deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.08) 35%,
+        rgba(255, 255, 255, 0.28) 50%,
+        transparent 65%
+    );
+    transform: translateX(-120%);
+    transition: transform 600ms ease;
+    pointer-events: none;
+}
+
+.btn-primary {
+    background: #2A2522;
+    color: #FBF9F6;
+    border: 1px solid #2A2522;
+}
+
 .btn-primary:hover {
     background: #C8A97E;
     border-color: #C8A97E;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(42, 37, 34, 0.18);
 }
+
+.btn-primary:hover::before {
+    transform: translateX(120%);
+}
+
 .btn-outline {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
     background: transparent;
     color: #2A2522;
-    padding: 1rem 2rem;
-    font-size: 0.8125rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    font-weight: 500;
-    transition: all 300ms ease;
     border: 1px solid rgba(42, 37, 34, 0.25);
-    cursor: pointer;
 }
+
 .btn-outline:hover {
-    border-color: #2A2522;
     background: #2A2522;
     color: #FBF9F6;
+    border-color: #2A2522;
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(42, 37, 34, 0.12);
+}
+
+.btn-outline:hover::before {
+    transform: translateX(120%);
+}
+
+.btn-primary:active,
+.btn-outline:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.btn-primary:focus-visible,
+.btn-outline:focus-visible {
+    outline: 2px solid #C8A97E;
+    outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .btn-primary,
+    .btn-outline,
+    .btn-primary::before,
+    .btn-outline::before {
+        transition: none;
+    }
 }
 
 .editorial-input {
@@ -193,6 +247,23 @@ textarea.editorial-input { resize: vertical; min-height: 120px; }
     display: block;
 }
 
+@keyframes arrowFade {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+}   
 @layer base {
     * { border-color: hsl(var(--border) / 1); }
 }

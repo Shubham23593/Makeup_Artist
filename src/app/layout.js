@@ -6,8 +6,8 @@ import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
 export const metadata = {
-  title: "Maison Lumière | Couture Makeup Atelier",
-  description: "A couture makeup atelier in Mumbai — private, considered, and quietly extraordinary.",
+  title: "Deepali Makeup Artist | Professional Makeup Services",
+  description: "Professional makeup artist specializing in bridal, party, and event makeup. Creating elegant, natural, and long-lasting looks for every special occasion.",
 };
 
 export default function RootLayout({ children }) {

@@ -10,7 +10,7 @@ export default function Pricing() {
       <section className="ed-container pt-16 md:pt-24 pb-16">
         <Heading 
            subtitle="Pricing"
-           title='Private packages, <em class="not-italic text-[#C8A97E]">transparently priced</em>.'
+           title='Clear pricing for every occasion, <em class="not-italic text-[#C8A97E]">Custom bookings available on request</em>.'
            titleClassName="text-5xl sm:text-6xl lg:text-7xl max-w-3xl"
         />
         <p className="mt-8 max-w-xl text-[#6B635E] leading-relaxed">
@@ -83,24 +83,24 @@ export default function Pricing() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-4">
               <Heading 
-                 subtitle="À la Carte"
+                 subtitle="Makeup Services"
                  title="Individual service rates."
                  titleClassName="text-3xl sm:text-4xl"
                  as="h3"
               />
               <p className="mt-4 text-[#6B635E] text-sm leading-relaxed">
-                Single-session pricing for occasions that do not require a package. Destination & early-morning fees may apply.
+                Pricing for individual makeup sessions. Travel charges may apply for outstation or early morning bookings.
               </p>
             </div>
             <div className="lg:col-span-8">
               <ul className="divide-y divide-[#2A2522]/10 border-t border-b border-[#2A2522]/10">
-                {SERVICES.map((s, i) => (
+                {SERVICES.map((s) => (
                   <li key={s.slug} className="flex items-center justify-between py-5" data-testid={`alacarte-${s.slug}`}>
                     <div>
                       <div className="font-serif text-xl">{s.title}</div>
                       <div className="text-xs text-[#6B635E] mt-1">{s.tagline}</div>
                     </div>
-                    <div className="font-serif text-2xl text-[#2A2522]">{formatINR(12500 + i * 3500)}</div>
+                    <div className="font-serif text-2xl text-[#2A2522]">{formatINR(s.price || 0)}</div>
                   </li>
                 ))}
               </ul>

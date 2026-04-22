@@ -6,66 +6,80 @@ import { STUDIO, SERVICES } from "@/lib/data";
 
 export default function Footer() {
   return (
-    <footer className="bg-[#2A2522] text-[#FBF9F6] mt-24" data-testid="site-footer">
-      <div className="ed-container py-20 grid grid-cols-1 md:grid-cols-12 gap-12">
-        <div className="md:col-span-4">
-          <div className="font-serif text-3xl leading-none">
-            Maison <em className="not-italic text-[#C8A97E]">Lumière</em>
+    <footer className="bg-[#2A2522] text-[#FBF9F6] pt-24 mt-24 relative overflow-hidden" data-testid="site-footer">
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-[#C8A97E] to-transparent opacity-50"></div>
+
+      <div className="ed-container relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-24 mb-20">
+          <div className="md:col-span-5">
+            <div className="font-serif text-4xl lg:text-5xl leading-tight">
+              Deepali <br/> <em className="not-italic text-[#C8A97E]">Makeovers.</em>
+            </div>
+            <p className="mt-8 text-[15px] leading-relaxed text-[#FBF9F6]/60 max-w-sm">
+               Artistry that enhances your natural beauty. Providing bespoke bridal, editorial, and event makeup services tailored for your unique moments.
+            </p>
+            <div className="flex items-center gap-5 mt-10">
+              <a href={STUDIO.instagram} target="_blank" rel="noreferrer" data-testid="footer-instagram" className="p-3 bg-[#FBF9F6]/5 rounded-full hover:bg-[#C8A97E] hover:text-[#2A2522] transition-all duration-300">
+                <Instagram size={18} />
+              </a>
+              <a href={STUDIO.facebook} target="_blank" rel="noreferrer" data-testid="footer-facebook" className="p-3 bg-[#FBF9F6]/5 rounded-full hover:bg-[#C8A97E] hover:text-[#2A2522] transition-all duration-300">
+                <Facebook size={18} />
+              </a>
+            </div>
           </div>
-          <p className="mt-5 text-sm leading-relaxed text-[#FBF9F6]/70 max-w-xs">
-            A couture makeup atelier in Mumbai — private, considered, and quietly extraordinary.
-          </p>
-          <div className="flex items-center gap-4 mt-8">
-            <a href={STUDIO.instagram} target="_blank" rel="noreferrer" data-testid="footer-instagram" className="p-2 border border-[#FBF9F6]/20 hover:border-[#C8A97E] hover:text-[#C8A97E] transition-colors">
-              <Instagram size={16} />
-            </a>
-            <a href={STUDIO.facebook} target="_blank" rel="noreferrer" data-testid="footer-facebook" className="p-2 border border-[#FBF9F6]/20 hover:border-[#C8A97E] hover:text-[#C8A97E] transition-colors">
-              <Facebook size={16} />
-            </a>
-            <a href={STUDIO.pinterest} target="_blank" rel="noreferrer" data-testid="footer-pinterest" className="p-2 border border-[#FBF9F6]/20 hover:border-[#C8A97E] hover:text-[#C8A97E] transition-colors text-xs tracking-widest">
-              P
-            </a>
+
+          <div className="md:col-span-7 grid grid-cols-2 lg:grid-cols-3 gap-8">
+            <div>
+              <div className="label-xs !text-[#C8A97E] mb-6 tracking-widest">Menu</div>
+              <ul className="space-y-4 text-[15px] text-[#FBF9F6]/70">
+                {["Home","About","Services","Portfolio","Pricing"].map((l) => (
+                  <li key={l}>
+                    <Link href={`/${l === "Home" ? "" : l.toLowerCase()}`} className="hover:text-[#FBF9F6] hover:translate-x-1 inline-block transition-transform duration-300">{l}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <div className="label-xs !text-[#C8A97E] mb-6 tracking-widest">Inquiries</div>
+              <ul className="space-y-4 text-[15px] text-[#FBF9F6]/70">
+                {["Booking","Testimonials","Contact"].map((l) => (
+                  <li key={l}>
+                    <Link href={`/${l.toLowerCase()}`} className="hover:text-[#FBF9F6] hover:translate-x-1 inline-block transition-transform duration-300">{l}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="col-span-2 lg:col-span-1">
+              <div className="label-xs !text-[#C8A97E] mb-6 tracking-widest">Studio</div>
+              <ul className="space-y-4 text-[15px] text-[#FBF9F6]/70">
+                <li className="flex items-start gap-3"><MapPin size={16} className="mt-1 text-[#C8A97E] shrink-0" /><span className="leading-relaxed">{STUDIO.address}</span></li>
+                <li className="flex items-center gap-3 mt-4"><Phone size={16} className="text-[#C8A97E] shrink-0" /><a href={`tel:${STUDIO.phone}`} className="hover:text-[#FBF9F6] transition-colors">{STUDIO.phone}</a></li>
+                <li className="flex items-center gap-3 mt-4"><Mail size={16} className="text-[#C8A97E] shrink-0" /><a href={`mailto:${STUDIO.email}`} className="hover:text-[#FBF9F6] transition-colors">{STUDIO.email}</a></li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        <div className="md:col-span-2">
-          <div className="label-xs !text-[#C8A97E] mb-5">Menu</div>
-          <ul className="space-y-3 text-sm text-[#FBF9F6]/80">
-            {["Home","About","Services","Portfolio","Pricing","Booking","Testimonials","Contact"].map((l) => (
-              <li key={l}>
-                <Link href={`/${l === "Home" ? "" : l.toLowerCase()}`} className="hover:text-[#C8A97E] transition-colors">{l}</Link>
-              </li>
-            ))}
-          </ul>
+        <div className="w-full text-center overflow-hidden flex flex-col items-center justify-center py-14 md:py-16 border-t border-[#FBF9F6]/10 border-b relative">
+          <h1 className="text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-[6.5vw] font-serif uppercase tracking-tight text-[#FBF9F6]/5 select-none pointer-events-none flex flex-col md:flex-row gap-0 md:gap-4 leading-[0.85] md:leading-none">
+  <span>Deepali</span>
+  <span>Makeovers</span>
+</h1>
+           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+             <div className="text-[10px] sm:text-xs md:text-sm tracking-[0.3em] font-medium bg-[#2A2522] px-4 md:px-6 py-2 text-[#C8A97E] uppercase text-center">
+                 Makeup Artist
+             </div>
+           </div>
         </div>
 
-        <div className="md:col-span-3">
-          <div className="label-xs !text-[#C8A97E] mb-5">Services</div>
-          <ul className="space-y-3 text-sm text-[#FBF9F6]/80">
-            {SERVICES.map((s) => (
-              <li key={s.slug}>
-                <Link href="/services" className="hover:text-[#C8A97E] transition-colors">{s.title}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="md:col-span-3">
-          <div className="label-xs !text-[#C8A97E] mb-5">Contact</div>
-          <ul className="space-y-4 text-sm text-[#FBF9F6]/80">
-            <li className="flex items-start gap-3"><MapPin size={15} className="mt-0.5 text-[#C8A97E]" /><span>{STUDIO.address}</span></li>
-            <li className="flex items-start gap-3"><Phone size={15} className="mt-0.5 text-[#C8A97E]" /><a href={`tel:${STUDIO.phone}`} className="hover:text-[#C8A97E]">{STUDIO.phone}</a></li>
-            <li className="flex items-start gap-3"><Mail size={15} className="mt-0.5 text-[#C8A97E]" /><a href={`mailto:${STUDIO.email}`} className="hover:text-[#C8A97E]">{STUDIO.email}</a></li>
-          </ul>
-        </div>
-      </div>
-
-      <div className="border-t border-[#FBF9F6]/10">
-        <div className="ed-container py-6 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[#FBF9F6]/50 tracking-wider uppercase">
-          <div>© {new Date().getFullYear()} Deepali . All Rights Reserved.</div>
+        <div className="py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#FBF9F6]/40 tracking-widest uppercase">
+          <div>© {new Date().getFullYear()} Deepali. All Rights Reserved.</div>
           <div className="flex items-center gap-4">
-            {/* <Link href="/admin" className="hover:text-[#C8A97E]" data-testid="footer-admin-link">Admin</Link> */}
-            <span>Developed by Shubham Dalvi</span>
+            <a href="https://shubham-portfolio-nine-eta.vercel.app/" target="_blank" className="hover:text-[#C8A97E] transition-colors">
+              Developed by Shubham Dalvi
+            </a>
           </div>
         </div>
       </div>

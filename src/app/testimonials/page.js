@@ -14,11 +14,35 @@ export default function Testimonials() {
     axios.get(`${API}/testimonials`).then((r) => setItems(r.data)).catch(() => {
        // Mock data if API is not running
        setItems([
-         { id: "1", rating: 5, text: "The most beautiful I have ever felt. Ishita understood my vision instantly.", name: "Aarohi M.", role: "Bride" },
-         { id: "2", rating: 5, text: "Professional, considered, and incredibly talented. The base lasted 14 hours flawlessly.", name: "Simran K.", role: "Bride" },
-         { id: "3", rating: 5, text: "We trust Maison Lumière for all our cover shoots. The HD work is unmatched.", name: "Priya S.", role: "Stylist" },
-         { id: "4", rating: 5, text: "Soft, glowy, and just perfect. I couldn't recommend them more for engagement looks.", name: "Nisha R.", role: "Bride" }
-       ]);
+  {
+    id: "1",
+    rating: 5,
+    text: "Thank you so much for the amazing makeup. Because of your work, my look turned out beautiful and our event went perfectly.",
+    name: "Sneha S.",
+    role: "Client"
+  },
+  {
+    id: "2",
+    rating: 5,
+    text: "Nice work, loved the makeup look. Very clean and beautiful finish.",
+    name: "Trushna",
+    role: "Client"
+  },
+  {
+    id: "3",
+    rating: 5,
+    text: "Beautiful work, loved the detailing and overall look.",
+    name: "Komal",
+    role: "Makeup Artist"
+  },
+  {
+    id: "4",
+    rating: 5,
+    text: "Amazing makeup, very neat and professional. Highly recommended.",
+    name: "Shweta",
+    role: "Client"
+  }
+]);
     });
   }, []);
 
@@ -27,11 +51,11 @@ export default function Testimonials() {
       <section className="ed-container pt-16 md:pt-24 pb-12">
         <Heading 
            subtitle="Stories"
-           title='The clients who <em class="not-italic text-[#C8A97E]">chose to return</em>.'
+           title='What Our <em class="not-italic text-[#C8A97E]">Clients Say</em>.'
            titleClassName="text-5xl sm:text-6xl lg:text-7xl max-w-4xl"
         />
         <p className="mt-8 max-w-xl text-[#6B635E] leading-relaxed">
-          Short notes from brides, editors, and regulars — shared with permission. More stories available on request.
+          Real experiences from our happy clients who trusted us for their special moments.
         </p>
       </section>
 
@@ -73,7 +97,7 @@ export default function Testimonials() {
       <section className="py-20 bg-[#F3EBE5]/50" data-testid="testimonials-cta">
         <div className="ed-container flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
           <Heading 
-             title="Your story could be next — and we would be honoured to write it."
+             title="Book your appointment and experience the perfect makeup look."
              as="h3"
              titleClassName="text-3xl sm:text-4xl max-w-xl"
           />

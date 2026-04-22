@@ -156,8 +156,9 @@ const fragmentShader = `
   }
 `;
 
-// --- CONFIG ---
-const SLIDES = [
+// Dynamic slides will be fetched from API and set in state.
+// We keep a fallback SLIDES_FALLBACK in case of errors.
+const SLIDES_FALLBACK = [
     {
         title: "Bridal Makeup",
         media: {
@@ -186,7 +187,6 @@ const SLIDES = [
             mobile: "/slider/splide4_smallscreen.jpeg"
         },
     }
-    
 ];
 
 const SLIDER_CONFIG = {
@@ -299,6 +299,8 @@ export default function SliderPage() {
   const [loaded, setLoaded] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [slides, setSlides] = useState([]);
+  const [slidesFetched, setSlidesFetched] = useState(false);
 
   // Refs to hold mutable logic state
   const logicRef = useRef({
@@ -386,18 +388,48 @@ export default function SliderPage() {
 
   const nextSlide = () => {
     const { current: logic } = logicRef;
-    const next = (logic.currentSlideIndex + 1) % SLIDES.length;
+    if (slides.length === 0) return;
+    const next = (logic.currentSlideIndex + 1) % slides.length;
     navigateTo(next);
   };
 
   const prevSlide = () => {
     const { current: logic } = logicRef;
-    const prev = (logic.currentSlideIndex - 1 + SLIDES.length) % SLIDES.length;
+    if (slides.length === 0) return;
+    const prev = (logic.currentSlideIndex - 1 + slides.length) % slides.length;
     navigateTo(prev);
   };
 
+  // Fetch slides first
+  useEffect(() => {
+    async function getSlides() {
+      try {
+        const res = await fetch("/api/images");
+        const data = await res.json();
+        
+        let newSlides = JSON.parse(JSON.stringify(SLIDES_FALLBACK));
+
+        if (data.success && data.images) {
+           data.images.forEach(img => {
+              if (img.category === "Slider 1 (Bridal Makeup)") newSlides[0].media = img.imageUrl;
+              if (img.category === "Slider 2 (HD Makeup)") newSlides[1].media = img.imageUrl;
+              if (img.category === "Slider 3 (Engagement Makeup)") newSlides[2].media = img.imageUrl;
+              if (img.category === "Slider 4 (Party Makeup)") newSlides[3].media = img.imageUrl;
+           });
+        }
+        setSlides(newSlides);
+      } catch (err) {
+         setSlides(SLIDES_FALLBACK);
+      } finally {
+         setSlidesFetched(true);
+      }
+    }
+    getSlides();
+  }, []);
+
   // --- WEBGL SETUP ---
   useEffect(() => {
+    if (!slidesFetched || slides.length === 0) return;
     if (!canvasRef.current) return;
     const { current: logic } = logicRef;
 
@@ -482,7 +514,7 @@ export default function SliderPage() {
       const loader = new THREE.TextureLoader().setCrossOrigin("anonymous");
       const isMobile = window.innerWidth < 768;
 
-      const loadPromises = SLIDES.map((slide) => {
+      const loadPromises = slides.map((slide) => {
         return new Promise((resolve, reject) => {
             const mediaUrl = typeof slide.media === 'object' && slide.media !== null
               ? (isMobile && slide.media.mobile ? slide.media.mobile : slide.media.desktop)
@@ -510,13 +542,14 @@ export default function SliderPage() {
       try {
         logic.textures = await Promise.all(loadPromises);
 
-        if (logic.textures.length >= 2 && logic.material) {
+        if (logic.textures.length > 0 && logic.material) {
           logic.material.uniforms.uTexture1.value = logic.textures[0];
-          logic.material.uniforms.uTexture2.value = logic.textures[1];
-          logic.material.uniforms.uTexture1Size.value =
-            logic.textures[0].userData.size;
-          logic.material.uniforms.uTexture2Size.value =
-            logic.textures[1].userData.size;
+          logic.material.uniforms.uTexture1Size.value = logic.textures[0].userData.size;
+          
+          if (logic.textures.length > 1) {
+            logic.material.uniforms.uTexture2.value = logic.textures[1];
+            logic.material.uniforms.uTexture2Size.value = logic.textures[1].userData.size;
+          }
         }
 
         const animate = () => {
@@ -591,13 +624,18 @@ export default function SliderPage() {
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("keydown", handleKey);
-      logic.pane?.dispose();
+      if (logic.pane) {
+        try {
+          logic.pane.dispose();
+        } catch (e) {}
+        logic.pane = null;
+      }
       logic.renderer?.dispose();
       if (logic.autoSlideTimer) clearTimeout(logic.autoSlideTimer);
       if (logic.progressInterval) clearInterval(logic.progressInterval);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Run once on mount
+  }, [slidesFetched, slides]); // Run once slides are fetched
 
   // Start timer once preloading is done
   useEffect(() => {
@@ -639,6 +677,35 @@ export default function SliderPage() {
         className="block w-full h-full absolute inset-0 z-0"
       />
 
+      {/* Scroll Down Arrow — Mobile Only */}
+     <div className="absolute bottom-24 md:bottom-28 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
+  <span className="text-[8px] tracking-[0.35em] uppercase text-white/80 font-medium">
+    Scroll
+  </span>
+
+  <div className="relative h-8 w-8">
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      className="absolute inset-0 text-white/90 animate-[arrowFade_1.8s_ease-in-out_infinite]"
+    >
+      <path d="M7 9l5 5 5-5" />
+    </svg>
+
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.2"
+      className="absolute inset-0 translate-y-2 text-[#C8A97E] animate-[arrowFade_1.8s_ease-in-out_infinite_0.25s]"
+    >
+      <path d="M7 9l5 5 5-5" />
+    </svg>
+  </div>
+</div>
+
       {/* 3. UI Layer */}
       <div className="relative z-10 w-full h-full pointer-events-none select-none">
         
@@ -657,9 +724,10 @@ export default function SliderPage() {
           {String(activeSlide + 1).padStart(2, "0")}
         </span>
 
+
         {/* Navigation */}
         <nav className="slides-navigation absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-8 flex gap-2 md:gap-4 pointer-events-auto">
-          {SLIDES.map((slide, idx) => (
+          {slides.map((slide, idx) => (
             <div
               key={idx}
               className={`group flex-1 flex flex-col cursor-pointer transition-colors ${

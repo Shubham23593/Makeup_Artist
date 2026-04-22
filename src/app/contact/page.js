@@ -44,18 +44,19 @@ export default function Contact() {
       <section className="ed-container pt-16 md:pt-24 pb-12">
         <Heading 
            subtitle="Contact"
-           title='A conversation, <em class="not-italic text-[#C8A97E]">first</em>.'
+           title='Get in <em class="not-italic text-[#C8A97E]">Touch</em>.'
            titleClassName="text-5xl sm:text-6xl lg:text-7xl max-w-3xl"
         />
         <p className="mt-8 max-w-xl text-[#6B635E] leading-relaxed">
-          Press, collaboration, or a bespoke enquiry — we would love to hear from you.
+          For bookings or any enquiries, feel free to contact us. We would be happy to assist you.
+
         </p>
       </section>
 
       <section className="ed-container pb-24 grid grid-cols-1 lg:grid-cols-12 gap-12">
         <div className="lg:col-span-5 space-y-10">
           <div data-testid="contact-info">
-            <div className="label-xs">Studio</div>
+            <div className="label-xs">Location</div>
             <div className="mt-4 flex items-start gap-3 text-[#2A2522]"><MapPin size={16} className="text-[#C8A97E] mt-1" />{STUDIO.address}</div>
           </div>
           <div>

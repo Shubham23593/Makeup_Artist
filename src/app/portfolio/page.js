@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PORTFOLIO, BEFORE_AFTER } from "@/lib/data";
 import Heading from "@/components/Heading";
 
@@ -36,15 +36,68 @@ const BeforeAfter = ({ item }) => {
 
 export default function Portfolio() {
   const [active, setActive] = useState("All");
-  const items = useMemo(() => active === "All" ? PORTFOLIO : PORTFOLIO.filter((p) => p.category === active), [active]);
+  const [portfolioData, setPortfolioData] = useState(PORTFOLIO);
+  const [beforeAfterData, setBeforeAfterData] = useState(BEFORE_AFTER);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("/api/images");
+        const data = await res.json();
+        if (data.success && data.images) {
+          let newBA = JSON.parse(JSON.stringify(BEFORE_AFTER));
+
+          // Collect only numbered portfolio slots: "Portfolio: Bridal 1" → { category: "Bridal", pos: 1 }
+          const portfolioItems = [];
+
+          data.images.forEach(img => {
+            // Match numbered slots like "Portfolio: Bridal 3"
+            const posMatch = img.category.match(/^Portfolio:\s+(.+?)\s+(\d+)$/);
+            if (posMatch) {
+              portfolioItems.push({
+                id: img._id,
+                category: posMatch[1],        // "Bridal"
+                pos: parseInt(posMatch[2]),     // 3
+                image: img.imageUrl,
+                title: img.title || posMatch[1],
+              });
+              return;
+            }
+
+            // Handle Before & Afters
+            if (img.category === "Before & After 1 (Before)") newBA[0].before = img.imageUrl;
+            if (img.category === "Before & After 1 (After)") newBA[0].after = img.imageUrl;
+            if (img.category === "Before & After 2 (Before)") newBA[1].before = img.imageUrl;
+            if (img.category === "Before & After 2 (After)") newBA[1].after = img.imageUrl;
+          });
+
+          // Sort by category name, then by position number
+          portfolioItems.sort((a, b) => {
+            if (a.category !== b.category) return a.category.localeCompare(b.category);
+            return a.pos - b.pos;
+          });
+
+          if (portfolioItems.length > 0) {
+            setPortfolioData(portfolioItems);
+          }
+          // else keeps the hardcoded PORTFOLIO fallback
+
+          setBeforeAfterData(newBA);
+        }
+      } catch (err) { }
+    }
+    fetchData();
+  }, []);
+
+  const items = useMemo(() => active === "All" ? portfolioData : portfolioData.filter((p) => p.category === active), [active, portfolioData]);
 
   return (
     <div data-testid="portfolio-page">
       <section className="ed-container pt-16 md:pt-24 pb-12">
-        <Heading 
-           subtitle="Portfolio"
-           title='The studio journal — <em class="not-italic text-[#C8A97E]">a curated archive</em>.'
-           titleClassName="text-5xl sm:text-6xl lg:text-7xl max-w-4xl"
+        <Heading
+          subtitle="Portfolio"
+          title='The studio journal — <em class="not-italic text-[#C8A97E]">a curated archive</em>.'
+          titleClassName="text-5xl sm:text-6xl lg:text-7xl max-w-4xl"
         />
         <p className="mt-8 max-w-xl text-[#6B635E] leading-relaxed">
           Selected work from brides, editorials, and evenings. Filter by chapter below.
@@ -56,11 +109,10 @@ export default function Portfolio() {
               key={c}
               onClick={() => setActive(c)}
               data-testid={`portfolio-filter-${c.toLowerCase()}`}
-              className={`px-5 py-2 text-xs tracking-[0.2em] uppercase font-medium border transition-colors ${
-                active === c
+              className={`px-5 py-2 text-xs tracking-[0.2em] uppercase font-medium border transition-colors ${active === c
                   ? "bg-[#2A2522] text-[#FBF9F6] border-[#2A2522]"
                   : "bg-transparent text-[#2A2522] border-[#2A2522]/20 hover:border-[#C8A97E] hover:text-[#C8A97E]"
-              }`}
+                }`}
             >
               {c}
             </button>
@@ -78,14 +130,18 @@ export default function Portfolio() {
               "col-span-6 md:col-span-4 aspect-square",
               "col-span-6 md:col-span-4 aspect-square",
               "col-span-12 md:col-span-4 aspect-[3/4]",
-              "col-span-12 md:col-span-6 aspect-[4/3]",
-              "col-span-12 md:col-span-6 aspect-[4/3]",
-              "col-span-12 md:col-span-8 aspect-[4/3]",
+              "col-span-12 md:col-span-6 aspect-[3/3]",
+              "col-span-12 md:col-span-6 aspect-[3/3]",
+              "col-span-12 md:col-span-8 aspect-[3/4]",
             ];
             const cls = spans[i % spans.length];
             return (
               <figure key={p.id} className={`group relative overflow-hidden ${cls}`} data-testid={`portfolio-item-${p.id}`}>
-                <img src={p.image} alt={p.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
                 <figcaption className="absolute inset-x-0 bottom-0 p-5 flex items-end justify-between bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                   <div>
                     <div className="label-xs !text-[#C8A97E]">{p.category}</div>
@@ -98,21 +154,22 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Before / After */}
+      {/* Before / After — temporarily commented out
       <section className="bg-[#F3EBE5]/50 py-24 md:py-32" data-testid="before-after-section">
         <div className="ed-container">
           <div className="flex items-end justify-between mb-12">
-            <Heading 
-               subtitle="The Transformation"
-               title="Before &amp; After — drag to reveal."
-               titleClassName="text-4xl sm:text-5xl max-w-xl"
+            <Heading
+              subtitle="The Transformation"
+              title="Before &amp; After — drag to reveal."
+              titleClassName="text-4xl sm:text-5xl max-w-xl"
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {BEFORE_AFTER.map((b) => <BeforeAfter key={b.id} item={b} />)}
+            {beforeAfterData.map((b) => <BeforeAfter key={b.id} item={b} />)}
           </div>
         </div>
       </section>
+      */}
     </div>
   );
 }

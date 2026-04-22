@@ -1,34 +1,77 @@
 "use client";
+import React, { useEffect, useState } from "react";
 import { Award, Sparkles, BookOpen } from "lucide-react";
-import { ABOUT_IMAGE, ARTIST, STUDIO } from "@/lib/data";
+import { ABOUT_IMAGE as FALLBACK_ABOUT_IMAGE, ARTIST, STUDIO } from "@/lib/data";
 import Heading from "@/components/Heading";
 import PrimaryButton from "@/components/PrimaryButton";
 
+const AnimatedCount = ({ value }) => {
+  const [count, setCount] = useState(0);
+  const target = parseInt(value) || 0;
+  const suffix = typeof value === 'string' ? value.replace(/[0-9]/g, '').trim() : '';
+
+  useEffect(() => {
+    let start = 0;
+    const duration = 2000;
+    const increment = target / (duration / 16);
+
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+    return () => clearInterval(timer);
+  }, [target]);
+
+  const displayCount = count < 10 && target < 10 ? `0${count}` : count;
+  return <span>{displayCount}{suffix && ` ${suffix}`}</span>;
+};
+
 export default function About() {
+  const [aboutImage, setAboutImage] = useState(FALLBACK_ABOUT_IMAGE);
+
+  useEffect(() => {
+    async function fetchImage() {
+      try {
+        const res = await fetch("/api/images?category=About Section");
+        const data = await res.json();
+        if (data.success && data.images && data.images.length > 0) {
+          setAboutImage(data.images[0].imageUrl);
+        }
+      } catch (err) {
+        console.error("Failed to fetch about image");
+      }
+    }
+    fetchImage();
+  }, []);
   return (
     <div data-testid="about-page">
       <section className="ed-container pt-16 md:pt-24 pb-20 md:pb-32 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
         <div className="lg:col-span-5 fade-up">
-          <Heading 
-             subtitle="About the Atelier"
-             title={`${ARTIST.name}.`}
-             titleClassName="text-5xl sm:text-6xl lg:text-7xl"
+          <Heading
+            subtitle="About the Atelier"
+            title={`${ARTIST.name}.`}
+            titleClassName="text-5xl sm:text-6xl lg:text-7xl"
           />
           <div className="font-serif italic text-[#C8A97E] text-2xl mt-3">{ARTIST.title}</div>
           <p className="mt-10 text-[17px] leading-relaxed text-[#6B635E] max-w-md">{ARTIST.bio}</p>
 
           <div className="mt-10 grid grid-cols-3 gap-6 border-t border-[#2A2522]/10 pt-8 max-w-md">
-            <div><div className="font-serif text-3xl">{ARTIST.experience}</div><div className="label-xs mt-1">Years</div></div>
-            <div><div className="font-serif text-3xl">{ARTIST.weddings}</div><div className="label-xs mt-1">Brides</div></div>
-            <div><div className="font-serif text-3xl">{ARTIST.editorials}</div><div className="label-xs mt-1">Editorials</div></div>
+            <div><div className="font-serif text-3xl"><AnimatedCount value={ARTIST.experience} /></div><div className="label-xs mt-1">YEARS</div></div>
+            <div><div className="font-serif text-3xl"><AnimatedCount value={ARTIST.weddings} /></div><div className="label-xs mt-1">CLIENTS</div></div>
+            <div><div className="font-serif text-3xl"><AnimatedCount value={ARTIST.editorials} /></div><div className="label-xs mt-1">MAKEOVERS</div></div>
           </div>
 
           <PrimaryButton href="/booking" className="mt-10" testId="about-book-btn">Begin Your Story</PrimaryButton>
         </div>
 
         <div className="lg:col-span-7">
-          <div className="hover-zoom aspect-[4/5]">
-            <img src={ABOUT_IMAGE} alt={`${ARTIST.name} at work`} className="w-full h-full object-cover" />
+          <div className="hover-zoom aspect-[3/3] bg-[#E5DCD3]">
+            {aboutImage && <img src={aboutImage} alt={`${ARTIST.name} at work`} className="w-full h-full object-cover" />}
           </div>
         </div>
       </section>
@@ -43,7 +86,7 @@ export default function About() {
             <blockquote className="font-serif italic text-3xl sm:text-4xl lg:text-5xl leading-tight text-[#2A2522] font-light">
               "{ARTIST.mission}"
             </blockquote>
-            <div className="mt-8 text-[#6B635E]">— {ARTIST.name}, Founder</div>
+            <div className="mt-8 text-[#6B635E]">— {ARTIST.name}</div>
           </div>
         </div>
       </section>
@@ -67,7 +110,7 @@ export default function About() {
           <div>
             <div className="flex items-center gap-3 mb-8">
               <BookOpen size={18} className="text-[#C8A97E]" />
-              <span className="label-xs">As Featured In</span>
+              <span className="label-xs">highlights</span>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {ARTIST.press.map((p, i) => (
@@ -82,7 +125,7 @@ export default function About() {
                 <Sparkles size={14} /> Philosophy
               </div>
               <p className="font-serif italic text-2xl leading-snug text-[#FBF9F6]/95">
-                Considered, quiet, and always in service of the person in the chair.
+                Makeup that enhances, not transforms — soft, elegant, and designed to bring out your natural glow.
               </p>
             </div>
           </div>
@@ -91,10 +134,10 @@ export default function About() {
 
       <section className="py-20" data-testid="about-cta">
         <div className="ed-container border-t border-[#2A2522]/15 pt-16 flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
-          <Heading 
-             title={`Visit the atelier in ${STUDIO.address.split(",")[1]?.trim() || "Mumbai"}.`}
-             as="h3"
-             titleClassName="text-3xl sm:text-4xl max-w-xl"
+          <Heading
+            title="Let’s create your perfect look."
+            as="h3"
+            titleClassName="text-3xl sm:text-4xl max-w-xl"
           />
           <PrimaryButton href="/contact" outline testId="about-visit-btn">Plan a Visit</PrimaryButton>
         </div>

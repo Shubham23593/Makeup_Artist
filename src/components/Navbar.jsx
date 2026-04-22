@@ -36,8 +36,9 @@ export default function Navbar() {
       }`}
     >
       <div className="ed-container flex items-center justify-between py-5">
-        <Link href="/" data-testid="nav-logo" className="flex items-center gap-3 group">
-          <img src="/logo.png" alt="Deepali Makeup Artist" className="h-12 md:h-16 w-auto object-contain mix-blend-multiply" />
+        <Link href="/" data-testid="nav-logo" className="flex flex-col items-start group">
+          <span className="font-serif text-[28px] md:text-[32px] leading-none text-[#2A2522] tracking-tight group-hover:text-[#C8A97E] transition-colors duration-300">Deepali</span>
+          <span className="text-[8px] md:text-[9px] tracking-[0.35em] text-[#C8A97E] uppercase mt-1.5 leading-none pl-0.5">Makeup Artist</span>
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8">
