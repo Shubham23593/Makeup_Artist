@@ -13,6 +13,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preload" as="image" href="/slider/splide1_largescreen.jpg" media="(min-width: 768px)" />
+        <link rel="preload" as="image" href="/slider/splide1_smallscreen.jpeg" media="(max-width: 767px)" />
+      </head>
       <body>
         <SmoothScroll>
           <div className="App min-h-screen">

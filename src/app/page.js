@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { ArrowUpRight, Star } from "lucide-react";
 import axios from "axios";
 import { HERO_IMAGE, SERVICES, PORTFOLIO, STUDIO, ARTIST } from "@/lib/data";
+import { optimizeImage } from "@/lib/utils";
 import Heading from "@/components/Heading";
 import PrimaryButton from "@/components/PrimaryButton";
 import SliderPage from "@/components/CrazyComponents/tsx/SliderPage";
@@ -63,34 +64,34 @@ function RecentWork() {
         <div className="grid grid-cols-12 gap-4 md:gap-6">
           {g[0] && (
             <div className="col-span-12 md:col-span-7 hover-zoom aspect-[4/3]">
-              <img src={g[0].image} alt={g[0].title} className="w-full h-full object-cover" />
+              <img src={optimizeImage(g[0].image, 800)} alt={g[0].title} className="w-full h-full object-cover" loading="lazy" />
             </div>
           )}
           <div className="col-span-12 md:col-span-5 flex flex-col gap-4 md:gap-6">
             {g[1] && (
               <div className="hover-zoom flex-1 aspect-[3/3]">
-                <img src={g[1].image} alt={g[1].title} className="w-full h-full object-cover" />
+                <img src={optimizeImage(g[1].image, 600)} alt={g[1].title} className="w-full h-full object-cover" loading="lazy" />
               </div>
             )}
             {g[2] && (
               <div className="hover-zoom flex-1 aspect-[4/3]">
-                <img src={g[2].image} alt={g[2].title} className="w-full h-full object-cover" />
+                <img src={optimizeImage(g[2].image, 600)} alt={g[2].title} className="w-full h-full object-cover" loading="lazy" />
               </div>
             )}
           </div>
           {g[3] && (
             <div className="col-span-6 md:col-span-4 hover-zoom aspect-[3/4]">
-              <img src={g[3].image} alt={g[3].title} className="w-full h-full object-cover" />
+              <img src={optimizeImage(g[3].image, 500)} alt={g[3].title} className="w-full h-full object-cover" loading="lazy" />
             </div>
           )}
           {g[4] && (
             <div className="col-span-6 md:col-span-4 hover-zoom aspect-[3/4]">
-              <img src={g[4].image} alt={g[4].title} className="w-full h-full object-cover" />
+              <img src={optimizeImage(g[4].image, 500)} alt={g[4].title} className="w-full h-full object-cover" loading="lazy" />
             </div>
           )}
           {g[5] && (
             <div className="col-span-12 md:col-span-4 hover-zoom aspect-[3/4]">
-              <img src={g[5].image} alt={g[5].title} className="w-full h-full object-cover" />
+              <img src={optimizeImage(g[5].image, 500)} alt={g[5].title} className="w-full h-full object-cover" loading="lazy" />
             </div>
           )}
         </div>
