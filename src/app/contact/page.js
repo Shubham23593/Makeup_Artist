@@ -80,7 +80,7 @@ export default function Contact() {
           </div>
         </div>
 
-        <form onSubmit={onSubmit} className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8" data-testid="contact-form" data-aos="fade-left" data-aos-delay="200">
+        <form onSubmit={onSubmit} className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8" data-testid="contact-form" data-aos="fade-up" data-aos-delay="100">
           <div>
             <label className="field-label" htmlFor="c-name">Name *</label>
             <input id="c-name" data-testid="contact-name" className="editorial-input" value={form.name} onChange={onChange("name")} required />

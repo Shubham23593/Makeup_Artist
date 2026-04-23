@@ -63,12 +63,12 @@ function RecentWork() {
           )}
           <div className="col-span-12 md:col-span-5 flex flex-col gap-4 md:gap-6">
             {g[1] && (
-              <div className="hover-zoom flex-1 aspect-[3/3] relative" data-aos="fade-up" data-aos-delay="200">
+              <div className="hover-zoom flex-1 aspect-[3/3] relative" data-aos="fade-up" data-aos-delay="50">
                 <Image src={optimizeImage(g[1].image, 600)} alt={g[1].title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 42vw" loading="lazy" />
               </div>
             )}
             {g[2] && (
-              <div className="hover-zoom flex-1 aspect-[4/3] relative" data-aos="fade-up" data-aos-delay="300">
+              <div className="hover-zoom flex-1 aspect-[4/3] relative" data-aos="fade-up" data-aos-delay="100">
                 <Image src={optimizeImage(g[2].image, 600)} alt={g[2].title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 42vw" loading="lazy" />
               </div>
             )}
@@ -233,7 +233,7 @@ export default function Home() {
           </div>
 
           {/* RIGHT GRID */}
-          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6" data-aos="fade-left" data-aos-delay="200">
+          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6" data-aos="fade-up" data-aos-delay="100">
 
             {testimonials.length > 0 ? (
               testimonials.slice(0, 4).map((t) => (

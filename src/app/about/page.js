@@ -63,7 +63,7 @@ export default function About() {
           <PrimaryButton href="/booking" className="mt-10" testId="about-book-btn">Begin Your Story</PrimaryButton>
         </div>
 
-        <div className="lg:col-span-7" data-aos="fade-left" data-aos-delay="200">
+        <div className="lg:col-span-7" data-aos="fade-up" data-aos-delay="100">
           <div className="hover-zoom aspect-[3/3] bg-[#E5DCD3] relative">
             {aboutImage && <Image src={aboutImage} alt={`${ARTIST.name} at work`} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 58vw" priority />}
           </div>
@@ -76,7 +76,7 @@ export default function About() {
           <div className="lg:col-span-5" data-aos="fade-right">
             <span className="label-xs">The Mission</span>
           </div>
-          <div className="lg:col-span-7" data-aos="fade-up" data-aos-delay="150">
+          <div className="lg:col-span-7" data-aos="fade-up" data-aos-delay="100">
             <blockquote className="font-serif italic text-3xl sm:text-4xl lg:text-5xl leading-tight text-[#2A2522] font-light">
               "{ARTIST.mission}"
             </blockquote>

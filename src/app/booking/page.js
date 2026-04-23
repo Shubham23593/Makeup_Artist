@@ -123,7 +123,7 @@ export default function Booking() {
         </div>
 
         {/* Sidebar */}
-        <aside className="lg:col-span-4" data-aos="fade-left" data-aos-delay="200">
+        <aside className="lg:col-span-4" data-aos="fade-up" data-aos-delay="100">
           <div className="bg-[#F3EBE5]/60 p-8 border-l-2 border-[#C8A97E]" data-testid="booking-sidebar">
             {/* <div className="label-xs">Studio Hours</div> */}
             {/* <ul className="mt-4 space-y-2 text-sm text-[#2A2522]">
