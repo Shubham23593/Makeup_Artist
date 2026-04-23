@@ -11,7 +11,7 @@ export default function Footer() {
 
       <div className="ed-container relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-24 mb-20">
-          <div className="md:col-span-5">
+          <div className="md:col-span-5" data-aos="fade-right">
             <div className="font-serif text-4xl lg:text-5xl leading-tight">
               Deepali <br/> <em className="not-italic text-[#C8A97E]">Makeovers.</em>
             </div>
@@ -29,7 +29,7 @@ export default function Footer() {
           </div>
 
           <div className="md:col-span-7 grid grid-cols-2 lg:grid-cols-3 gap-8">
-            <div>
+            <div data-aos="fade-up" data-aos-delay="100">
               <div className="label-xs !text-[#C8A97E] mb-6 tracking-widest">Menu</div>
               <ul className="space-y-4 text-[15px] text-[#FBF9F6]/70">
                 {["Home","About","Services","Portfolio","Pricing"].map((l) => (
@@ -40,7 +40,7 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div>
+            <div data-aos="fade-up" data-aos-delay="200">
               <div className="label-xs !text-[#C8A97E] mb-6 tracking-widest">Inquiries</div>
               <ul className="space-y-4 text-[15px] text-[#FBF9F6]/70">
                 {["Booking","Testimonials","Contact"].map((l) => (
@@ -51,7 +51,7 @@ export default function Footer() {
               </ul>
             </div>
 
-            <div className="col-span-2 lg:col-span-1">
+            <div className="col-span-2 lg:col-span-1" data-aos="fade-up" data-aos-delay="300">
               <div className="label-xs !text-[#C8A97E] mb-6 tracking-widest">Studio</div>
               <ul className="space-y-4 text-[15px] text-[#FBF9F6]/70">
                 <li className="flex items-start gap-3"><MapPin size={16} className="mt-1 text-[#C8A97E] shrink-0" /><span className="leading-relaxed">{STUDIO.address}</span></li>
@@ -62,7 +62,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="w-full text-center overflow-hidden flex flex-col items-center justify-center py-14 md:py-16 border-t border-[#FBF9F6]/10 border-b relative">
+        <div className="w-full text-center overflow-hidden flex flex-col items-center justify-center py-14 md:py-16 border-t border-[#FBF9F6]/10 border-b relative" data-aos="zoom-in" data-aos-delay="100">
           <h1 className="text-[12vw] sm:text-[10vw] md:text-[8vw] lg:text-[6.5vw] font-serif uppercase tracking-tight text-[#FBF9F6]/5 select-none pointer-events-none flex flex-col md:flex-row gap-0 md:gap-4 leading-[0.85] md:leading-none">
   <span>Deepali</span>
   <span>Makeovers</span>
@@ -74,7 +74,7 @@ export default function Footer() {
            </div>
         </div>
 
-        <div className="py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#FBF9F6]/40 tracking-widest uppercase">
+        <div className="py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#FBF9F6]/40 tracking-widest uppercase" data-aos="fade-up" data-aos-delay="200">
           <div>© {new Date().getFullYear()} Deepali. All Rights Reserved.</div>
           <div className="flex items-center gap-4">
             <a href="https://shubham-portfolio-nine-eta.vercel.app/" target="_blank" className="hover:text-[#C8A97E] transition-colors">

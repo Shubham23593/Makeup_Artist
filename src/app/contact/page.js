@@ -41,7 +41,7 @@ export default function Contact() {
 
   return (
     <div data-testid="contact-page">
-      <section className="ed-container pt-16 md:pt-24 pb-12">
+      <section className="ed-container pt-16 md:pt-24 pb-12" data-aos="fade-up">
         <Heading 
            subtitle="Contact"
            title='Get in <em class="not-italic text-[#C8A97E]">Touch</em>.'
@@ -54,7 +54,7 @@ export default function Contact() {
       </section>
 
       <section className="ed-container pb-24 grid grid-cols-1 lg:grid-cols-12 gap-12">
-        <div className="lg:col-span-5 space-y-10">
+        <div className="lg:col-span-5 space-y-10" data-aos="fade-right">
           <div data-testid="contact-info">
             <div className="label-xs">Location</div>
             <div className="mt-4 flex items-start gap-3 text-[#2A2522]"><MapPin size={16} className="text-[#C8A97E] mt-1" />{STUDIO.address}</div>
@@ -80,7 +80,7 @@ export default function Contact() {
           </div>
         </div>
 
-        <form onSubmit={onSubmit} className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8" data-testid="contact-form">
+        <form onSubmit={onSubmit} className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8" data-testid="contact-form" data-aos="fade-left" data-aos-delay="200">
           <div>
             <label className="field-label" htmlFor="c-name">Name *</label>
             <input id="c-name" data-testid="contact-name" className="editorial-input" value={form.name} onChange={onChange("name")} required />

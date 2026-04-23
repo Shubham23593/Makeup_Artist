@@ -48,7 +48,7 @@ export default function Testimonials() {
 
   return (
     <div data-testid="testimonials-page">
-      <section className="ed-container pt-16 md:pt-24 pb-12">
+      <section className="ed-container pt-16 md:pt-24 pb-12" data-aos="fade-up">
         <Heading 
            subtitle="Stories"
            title='What Our <em class="not-italic text-[#C8A97E]">Clients Say</em>.'
@@ -72,7 +72,7 @@ export default function Testimonials() {
               : "bg-[#C8A97E]/15 border-l-2 border-[#C8A97E]";
           const textCol = variant === 2 ? "text-[#FBF9F6]/90" : "text-[#2A2522]";
           return (
-            <article key={t.id} className={`p-10 md:p-14 ${base}`} data-testid={`testimonial-${t.id}`}>
+            <article key={t.id} className={`p-10 md:p-14 ${base}`} data-testid={`testimonial-${t.id}`} data-aos="fade-up" data-aos-delay={`${(idx % 2) * 150}`}>
               <Quote size={22} className={variant === 2 ? "text-[#C8A97E]" : "text-[#C8A97E]"} />
               <div className="flex gap-1 mt-5">
                 {Array.from({ length: t.rating }).map((_, i) => (
@@ -95,7 +95,7 @@ export default function Testimonials() {
       </section>
 
       <section className="py-20 bg-[#F3EBE5]/50" data-testid="testimonials-cta">
-        <div className="ed-container flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+        <div className="ed-container flex flex-col md:flex-row items-start md:items-end justify-between gap-8" data-aos="fade-up">
           <Heading 
              title="Book your appointment and experience the perfect makeup look."
              as="h3"

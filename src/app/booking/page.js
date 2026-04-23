@@ -42,7 +42,7 @@ export default function Booking() {
 
   return (
     <div data-testid="booking-page">
-      <section className="ed-container pt-16 md:pt-24 pb-12">
+      <section className="ed-container pt-16 md:pt-24 pb-12" data-aos="fade-up">
         <Heading 
            subtitle="Book an Appointment"
            title='Reserve your <em class="not-italic text-[#C8A97E]">makeup appointment.</em>'
@@ -54,7 +54,7 @@ export default function Booking() {
       </section>
 
       <section className="ed-container pb-24 md:pb-32 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-8" data-aos="fade-up" data-aos-delay="100">
           {submitted ? (
             <div className="bg-[#2A2522] text-[#FBF9F6] p-10 md:p-14" data-testid="booking-success">
               <div className="label-xs !text-[#C8A97E]">Reservation Received</div>
@@ -123,7 +123,7 @@ export default function Booking() {
         </div>
 
         {/* Sidebar */}
-        <aside className="lg:col-span-4">
+        <aside className="lg:col-span-4" data-aos="fade-left" data-aos-delay="200">
           <div className="bg-[#F3EBE5]/60 p-8 border-l-2 border-[#C8A97E]" data-testid="booking-sidebar">
             {/* <div className="label-xs">Studio Hours</div> */}
             {/* <ul className="mt-4 space-y-2 text-sm text-[#2A2522]">

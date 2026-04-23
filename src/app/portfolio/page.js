@@ -1,6 +1,8 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import Image from "next/image";
 import { PORTFOLIO, BEFORE_AFTER } from "@/lib/data";
+import { useImageData } from "@/lib/ImageDataContext";
 import Heading from "@/components/Heading";
 
 const CATEGORIES = ["All", "Bridal", "Party", "Photoshoot"];
@@ -36,64 +38,52 @@ const BeforeAfter = ({ item }) => {
 
 export default function Portfolio() {
   const [active, setActive] = useState("All");
-  const [portfolioData, setPortfolioData] = useState(PORTFOLIO);
-  const [beforeAfterData, setBeforeAfterData] = useState(BEFORE_AFTER);
+  const { images, loading } = useImageData();
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch("/api/images");
-        const data = await res.json();
-        if (data.success && data.images) {
-          let newBA = JSON.parse(JSON.stringify(BEFORE_AFTER));
-
-          // Collect only numbered portfolio slots: "Portfolio: Bridal 1" → { category: "Bridal", pos: 1 }
-          const portfolioItems = [];
-
-          data.images.forEach(img => {
-            // Match numbered slots like "Portfolio: Bridal 3"
-            const posMatch = img.category.match(/^Portfolio:\s+(.+?)\s+(\d+)$/);
-            if (posMatch) {
-              portfolioItems.push({
-                id: img._id,
-                category: posMatch[1],        // "Bridal"
-                pos: parseInt(posMatch[2]),     // 3
-                image: img.imageUrl,
-                title: img.title || posMatch[1],
-              });
-              return;
-            }
-
-            // Handle Before & Afters
-            if (img.category === "Before & After 1 (Before)") newBA[0].before = img.imageUrl;
-            if (img.category === "Before & After 1 (After)") newBA[0].after = img.imageUrl;
-            if (img.category === "Before & After 2 (Before)") newBA[1].before = img.imageUrl;
-            if (img.category === "Before & After 2 (After)") newBA[1].after = img.imageUrl;
-          });
-
-          // Sort by category name, then by position number
-          portfolioItems.sort((a, b) => {
-            if (a.category !== b.category) return a.category.localeCompare(b.category);
-            return a.pos - b.pos;
-          });
-
-          if (portfolioItems.length > 0) {
-            setPortfolioData(portfolioItems);
-          }
-          // else keeps the hardcoded PORTFOLIO fallback
-
-          setBeforeAfterData(newBA);
-        }
-      } catch (err) { }
+  const { portfolioData, beforeAfterData } = useMemo(() => {
+    if (loading || !images || images.length === 0) {
+      return { portfolioData: PORTFOLIO, beforeAfterData: BEFORE_AFTER };
     }
-    fetchData();
-  }, []);
+
+    let newBA = JSON.parse(JSON.stringify(BEFORE_AFTER));
+    const portfolioItems = [];
+
+    images.forEach(img => {
+      const posMatch = img.category.match(/^Portfolio:\s+(.+?)\s+(\d+)$/);
+      if (posMatch) {
+        portfolioItems.push({
+          id: img._id,
+          category: posMatch[1],
+          pos: parseInt(posMatch[2]),
+          image: img.imageUrl,
+          title: img.title || posMatch[1],
+        });
+        return;
+      }
+
+      // Handle Before & Afters
+      if (img.category === "Before & After 1 (Before)") newBA[0].before = img.imageUrl;
+      if (img.category === "Before & After 1 (After)") newBA[0].after = img.imageUrl;
+      if (img.category === "Before & After 2 (Before)") newBA[1].before = img.imageUrl;
+      if (img.category === "Before & After 2 (After)") newBA[1].after = img.imageUrl;
+    });
+
+    portfolioItems.sort((a, b) => {
+      if (a.category !== b.category) return a.category.localeCompare(b.category);
+      return a.pos - b.pos;
+    });
+
+    return {
+      portfolioData: portfolioItems.length > 0 ? portfolioItems : PORTFOLIO,
+      beforeAfterData: newBA,
+    };
+  }, [images, loading]);
 
   const items = useMemo(() => active === "All" ? portfolioData : portfolioData.filter((p) => p.category === active), [active, portfolioData]);
 
   return (
     <div data-testid="portfolio-page">
-      <section className="ed-container pt-16 md:pt-24 pb-12">
+      <section className="ed-container pt-16 md:pt-24 pb-12" data-aos="fade-up">
         <Heading
           subtitle="Portfolio"
           title='The studio journal — <em class="not-italic text-[#C8A97E]">a curated archive</em>.'
@@ -136,11 +126,14 @@ export default function Portfolio() {
             ];
             const cls = spans[i % spans.length];
             return (
-              <figure key={p.id} className={`group relative overflow-hidden ${cls}`} data-testid={`portfolio-item-${p.id}`}>
-                <img
+              <figure key={p.id} className={`group relative overflow-hidden ${cls}`} data-testid={`portfolio-item-${p.id}`} data-aos="fade-up" data-aos-delay={`${(i % 3) * 100}`}>
+                <Image
                   src={p.image}
                   alt={p.title}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  fill
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  loading="lazy"
                 />
                 <figcaption className="absolute inset-x-0 bottom-0 p-5 flex items-end justify-between bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
                   <div>

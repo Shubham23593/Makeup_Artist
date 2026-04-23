@@ -1,7 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import { Award, Sparkles, BookOpen } from "lucide-react";
 import { ABOUT_IMAGE as FALLBACK_ABOUT_IMAGE, ARTIST, STUDIO } from "@/lib/data";
+import { useImageData } from "@/lib/ImageDataContext";
 import Heading from "@/components/Heading";
 import PrimaryButton from "@/components/PrimaryButton";
 
@@ -32,26 +34,18 @@ const AnimatedCount = ({ value }) => {
 };
 
 export default function About() {
-  const [aboutImage, setAboutImage] = useState(FALLBACK_ABOUT_IMAGE);
+  const { images, loading } = useImageData();
 
-  useEffect(() => {
-    async function fetchImage() {
-      try {
-        const res = await fetch("/api/images?category=About Section");
-        const data = await res.json();
-        if (data.success && data.images && data.images.length > 0) {
-          setAboutImage(data.images[0].imageUrl);
-        }
-      } catch (err) {
-        console.error("Failed to fetch about image");
-      }
-    }
-    fetchImage();
-  }, []);
+  // Derive aboutImage from shared context
+  const aboutImage = React.useMemo(() => {
+    if (loading || !images || images.length === 0) return FALLBACK_ABOUT_IMAGE;
+    const aboutImg = images.find(img => img.category === 'About Section');
+    return aboutImg ? aboutImg.imageUrl : FALLBACK_ABOUT_IMAGE;
+  }, [images, loading]);
   return (
     <div data-testid="about-page">
       <section className="ed-container pt-16 md:pt-24 pb-20 md:pb-32 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        <div className="lg:col-span-5 fade-up">
+        <div className="lg:col-span-5" data-aos="fade-right">
           <Heading
             subtitle="About the Atelier"
             title={`${ARTIST.name}.`}
@@ -69,9 +63,9 @@ export default function About() {
           <PrimaryButton href="/booking" className="mt-10" testId="about-book-btn">Begin Your Story</PrimaryButton>
         </div>
 
-        <div className="lg:col-span-7">
-          <div className="hover-zoom aspect-[3/3] bg-[#E5DCD3]">
-            {aboutImage && <img src={aboutImage} alt={`${ARTIST.name} at work`} className="w-full h-full object-cover" />}
+        <div className="lg:col-span-7" data-aos="fade-left" data-aos-delay="200">
+          <div className="hover-zoom aspect-[3/3] bg-[#E5DCD3] relative">
+            {aboutImage && <Image src={aboutImage} alt={`${ARTIST.name} at work`} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 58vw" priority />}
           </div>
         </div>
       </section>
@@ -79,10 +73,10 @@ export default function About() {
       {/* Mission */}
       <section className="bg-[#F3EBE5]/50 py-24 md:py-32" data-testid="mission-section">
         <div className="ed-container grid grid-cols-1 lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5" data-aos="fade-right">
             <span className="label-xs">The Mission</span>
           </div>
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7" data-aos="fade-up" data-aos-delay="150">
             <blockquote className="font-serif italic text-3xl sm:text-4xl lg:text-5xl leading-tight text-[#2A2522] font-light">
               "{ARTIST.mission}"
             </blockquote>
@@ -94,7 +88,7 @@ export default function About() {
       {/* Certifications & Press */}
       <section className="py-24 md:py-32" data-testid="credentials-section">
         <div className="ed-container grid grid-cols-1 lg:grid-cols-2 gap-16">
-          <div>
+          <div data-aos="fade-up">
             <div className="flex items-center gap-3 mb-8">
               <Award size={18} className="text-[#C8A97E]" />
               <span className="label-xs">Certifications</span>
@@ -107,7 +101,7 @@ export default function About() {
               ))}
             </ul>
           </div>
-          <div>
+          <div data-aos="fade-up" data-aos-delay="150">
             <div className="flex items-center gap-3 mb-8">
               <BookOpen size={18} className="text-[#C8A97E]" />
               <span className="label-xs">highlights</span>
@@ -133,7 +127,7 @@ export default function About() {
       </section>
 
       <section className="py-20" data-testid="about-cta">
-        <div className="ed-container border-t border-[#2A2522]/15 pt-16 flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+        <div className="ed-container border-t border-[#2A2522]/15 pt-16 flex flex-col md:flex-row items-start md:items-end justify-between gap-8" data-aos="fade-up">
           <Heading
             title="Let’s create your perfect look."
             as="h3"

@@ -1,39 +1,28 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useMemo } from "react";
+import Image from "next/image";
 import { Check, ArrowUpRight } from "lucide-react";
 import { SERVICES as BASE_SERVICES } from "@/lib/data";
+import { useImageData } from "@/lib/ImageDataContext";
 import Heading from "@/components/Heading";
 import PrimaryButton from "@/components/PrimaryButton";
 
 export default function Services() {
-  const [servicesData, setServicesData] = useState(BASE_SERVICES);
+  const { images, loading } = useImageData();
 
-  useEffect(() => {
-    async function fetchDynamicImages() {
-      try {
-        const res = await fetch("/api/images");
-        const data = await res.json();
-
-        if (data.success && data.images.length > 0) {
-          // Map default services with dynamic images if found
-          const updatedServices = BASE_SERVICES.map(service => {
-            const dynamicImg = data.images.find(img => img.category === `Service: ${service.title}`);
-            if (dynamicImg) {
-              return { ...service, image: dynamicImg.imageUrl };
-            }
-            return service;
-          });
-          setServicesData(updatedServices);
-        }
-      } catch (err) {
-        console.error("Failed to fetch dynamic service images", err);
+  const servicesData = useMemo(() => {
+    if (loading || !images || images.length === 0) return BASE_SERVICES;
+    return BASE_SERVICES.map(service => {
+      const dynamicImg = images.find(img => img.category === `Service: ${service.title}`);
+      if (dynamicImg) {
+        return { ...service, image: dynamicImg.imageUrl };
       }
-    }
-    fetchDynamicImages();
-  }, []);
+      return service;
+    });
+  }, [images, loading]);
   return (
     <div data-testid="services-page">
-      <section className="ed-container pt-16 md:pt-24 pb-16">
+      <section className="ed-container pt-16 md:pt-24 pb-16" data-aos="fade-up">
         <Heading
           subtitle="The Services"
           title='Six services, one goal — to make you look <em class="not-italic text-[#C8A97E]">Confident and Beautiful</em>.'
@@ -53,14 +42,18 @@ export default function Services() {
                 key={s.slug}
                 className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center"
                 data-testid={`service-row-${s.slug}`}
+                data-aos={even ? "fade-right" : "fade-left"}
               >
                 <div className={`lg:col-span-7 ${even ? "" : "lg:order-2"}`}>
-                  <div className="h-[500px] flex items-center justify-center">
+                    <div className="h-[500px] flex items-center justify-center relative">
                     {s.image ? (
-                      <img
+                      <Image
                         src={s.image}
                         alt={s.title}
-                        className="max-h-full w-auto object-contain"
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 1024px) 100vw, 58vw"
+                        loading="lazy"
                       />
                     ) : (
                       <div className="text-center text-[#C8A97E] font-serif italic text-xl opacity-60 select-none">

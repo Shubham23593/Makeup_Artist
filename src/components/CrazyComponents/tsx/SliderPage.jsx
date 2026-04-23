@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
-import { Pane } from "tweakpane";
+// Tweakpane is dynamically imported in dev only — see effect below
 import { HERO_IMAGE, PORTFOLIO, SERVICES } from "@/lib/data";
 import PrimaryButton from "@/components/PrimaryButton";
 import { ArrowUpRight } from "lucide-react";
@@ -191,8 +191,8 @@ const SLIDES_FALLBACK = [
 
 const SLIDER_CONFIG = {
   settings: {
-    transitionDuration: 2.5,
-    autoSlideSpeed: 5000,
+    transitionDuration: 1.8,
+    autoSlideSpeed: 4000,
     currentEffect: "glass",
     globalIntensity: 1.0,
     speedMultiplier: 1.0,
@@ -218,7 +218,7 @@ const Preloader = ({ onLoadComplete }) => {
 
     let animationId;
     let startTime;
-    const duration = 2500;
+    const duration = 1500;
 
     const dotRings = [
       { radius: 20, count: 8 },
@@ -314,6 +314,8 @@ export default function SliderPage() {
     autoSlideTimer: null,
     progressInterval: null,
     progress: 0,
+    needsRender: true,
+    animFrameId: null,
   });
 
   // --- LOGIC FUNCTIONS (Defined before usage in Effect) ---
@@ -364,6 +366,7 @@ export default function SliderPage() {
     logic.material.uniforms.uTexture1Size.value = currTex.userData.size;
     logic.material.uniforms.uTexture2Size.value = nextTex.userData.size;
 
+    logic.needsRender = true; // Start rendering during transition
     gsap.fromTo(
       logic.material.uniforms.uProgress,
       { value: 0 },
@@ -379,6 +382,7 @@ export default function SliderPage() {
           logic.currentSlideIndex = index;
           setActiveSlide(index);
           setIsTransitioning(false);
+          logic.needsRender = false; // Stop rendering when idle
           startTimer();
         },
       }
@@ -446,7 +450,9 @@ export default function SliderPage() {
       alpha: false,
     });
     logic.renderer.setSize(window.innerWidth, window.innerHeight);
-    logic.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Cap pixel ratio lower on mobile for faster rendering
+    const isMobile = window.innerWidth < 768;
+    logic.renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
 
     // 2. Material
     logic.material = new THREE.ShaderMaterial({
@@ -552,12 +558,20 @@ export default function SliderPage() {
           }
         }
 
-        const animate = () => {
+        // Render only when needed, not every frame
+        const renderOnce = () => {
           if (logic.renderer && logic.scene && logic.camera) {
             logic.renderer.render(logic.scene, logic.camera);
           }
-          requestAnimationFrame(animate);
         };
+        const animate = () => {
+          if (logic.needsRender && logic.renderer && logic.scene && logic.camera) {
+            logic.renderer.render(logic.scene, logic.camera);
+          }
+          logic.animFrameId = requestAnimationFrame(animate);
+        };
+        renderOnce(); // Render the first frame
+        logic.needsRender = false;
         animate();
       } catch (err) {
         console.error("Error loading textures:", err);
@@ -566,35 +580,39 @@ export default function SliderPage() {
 
     loadTextures();
 
-    // 4. Setup Tweakpane
-    if (!logic.pane) {
-      logic.pane = new Pane({ title: "Visual Effects", expanded: false });
-      const f1 = logic.pane.addFolder({ title: "General" });
-      f1.addBinding(SLIDER_CONFIG.settings, "globalIntensity", {
-        min: 0.1,
-        max: 2.0,
-      }).on(
-        "change",
-        (ev) => (logic.material.uniforms.uGlobalIntensity.value = ev.value)
-      );
-      f1.addBinding(SLIDER_CONFIG.settings, "distortionStrength", {
-        min: 0.1,
-        max: 3.0,
-      }).on(
-        "change",
-        (ev) => (logic.material.uniforms.uDistortionStrength.value = ev.value)
-      );
+    // 4. Setup Tweakpane (only in development)
+    if (process.env.NODE_ENV === 'development' && !logic.pane) {
+      import('tweakpane').then(({ Pane: TweakPane }) => {
+        logic.pane = new TweakPane({ title: "Visual Effects", expanded: false });
+        const f1 = logic.pane.addFolder({ title: "General" });
+        f1.addBinding(SLIDER_CONFIG.settings, "globalIntensity", {
+          min: 0.1,
+          max: 2.0,
+        }).on(
+          "change",
+          (ev) => { logic.material.uniforms.uGlobalIntensity.value = ev.value; logic.needsRender = true; }
+        );
+        f1.addBinding(SLIDER_CONFIG.settings, "distortionStrength", {
+          min: 0.1,
+          max: 3.0,
+        }).on(
+          "change",
+          (ev) => { logic.material.uniforms.uDistortionStrength.value = ev.value; logic.needsRender = true; }
+        );
 
-      const f2 = logic.pane.addFolder({ title: "Glass Effect" });
-      f2.addBinding(SLIDER_CONFIG.settings, "glassRefractionStrength", {
-        min: 0.1,
-        max: 3.0,
-      }).on("change", (ev) => {
-        if (logic.material)
-          logic.material.uniforms.uGlassRefractionStrength.value = ev.value;
+        const f2 = logic.pane.addFolder({ title: "Glass Effect" });
+        f2.addBinding(SLIDER_CONFIG.settings, "glassRefractionStrength", {
+          min: 0.1,
+          max: 3.0,
+        }).on("change", (ev) => {
+          if (logic.material) {
+            logic.material.uniforms.uGlassRefractionStrength.value = ev.value;
+            logic.needsRender = true;
+          }
+        });
+
+        logic.pane.element.style.display = "none";
       });
-
-      logic.pane.element.style.display = "none";
     }
 
     // 5. Events
@@ -605,6 +623,9 @@ export default function SliderPage() {
           window.innerWidth,
           window.innerHeight
         );
+        logic.needsRender = true;
+        // Re-render once after resize settles
+        setTimeout(() => { logic.needsRender = false; }, 100);
       }
     };
 
@@ -624,6 +645,7 @@ export default function SliderPage() {
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("keydown", handleKey);
+      if (logic.animFrameId) cancelAnimationFrame(logic.animFrameId);
       if (logic.pane) {
         try {
           logic.pane.dispose();
@@ -654,13 +676,6 @@ export default function SliderPage() {
       }}
     >
       <style jsx global>{`
-        @import url("https://fonts.cdnfonts.com/css/pp-neue-montreal");
-
-        :root {
-          --font-mono: "PPSupplyMono", monospace;
-          --font-sans: "PP Neue Montreal", sans-serif;
-        }
-
         .tp-dfwv {
           z-index: 1000 !important;
           top: 20px !important;
@@ -677,34 +692,20 @@ export default function SliderPage() {
         className="block w-full h-full absolute inset-0 z-0"
       />
 
-      {/* Scroll Down Arrow — Mobile Only */}
-     <div className="absolute bottom-24 md:bottom-28 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
-  <span className="text-[8px] tracking-[0.35em] uppercase text-white/80 font-medium">
-    Scroll
-  </span>
-
-  <div className="relative h-8 w-8">
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      className="absolute inset-0 text-white/90 animate-[arrowFade_1.8s_ease-in-out_infinite]"
-    >
-      <path d="M7 9l5 5 5-5" />
-    </svg>
-
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      className="absolute inset-0 translate-y-2 text-[#C8A97E] animate-[arrowFade_1.8s_ease-in-out_infinite_0.25s]"
-    >
-      <path d="M7 9l5 5 5-5" />
-    </svg>
-  </div>
-</div>
+      {/* Scroll Down Arrow */}
+      <div className="absolute bottom-[88px] sm:bottom-24 md:bottom-28 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 sm:gap-2">
+        <span className="text-[7px] sm:text-[8px] tracking-[0.35em] uppercase text-white/80 font-medium">Scroll</span>
+        <div className="relative h-6 w-6 sm:h-8 sm:w-8">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"
+            className="absolute inset-0 text-white/90 animate-[arrowFade_1.8s_ease-in-out_infinite]">
+            <path d="M7 9l5 5 5-5" />
+          </svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"
+            className="absolute inset-0 translate-y-1.5 sm:translate-y-2 text-[#C8A97E] animate-[arrowFade_1.8s_ease-in-out_infinite_0.25s]">
+            <path d="M7 9l5 5 5-5" />
+          </svg>
+        </div>
+      </div>
 
       {/* 3. UI Layer */}
       <div className="relative z-10 w-full h-full pointer-events-none select-none">
@@ -719,18 +720,13 @@ export default function SliderPage() {
           </PrimaryButton>
         </div> */}
 
-        {/* Slide Counter */}
-        <span className="absolute top-1/2 left-4 md:left-8 -translate-y-1/2 font-mono text-xs font-semibold tracking-widest uppercase text-[#2A2522]">
-          {String(activeSlide + 1).padStart(2, "0")}
-        </span>
-
 
         {/* Navigation */}
-        <nav className="slides-navigation absolute bottom-4 left-4 right-4 md:bottom-8 md:left-8 md:right-8 flex gap-2 md:gap-4 pointer-events-auto">
+        <nav className="slides-navigation absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-4 sm:right-4 md:bottom-8 md:left-8 md:right-8 flex gap-1.5 sm:gap-2 md:gap-4 pointer-events-auto">
           {slides.map((slide, idx) => (
             <div
               key={idx}
-              className={`group flex-1 flex flex-col cursor-pointer transition-colors ${
+              className={`group flex-1 min-w-0 flex flex-col cursor-pointer transition-colors ${
                 idx === activeSlide
                   ? "text-[#2A2522]"
                   : "text-[#2A2522]/50 hover:text-[#2A2522]/80"
@@ -740,14 +736,14 @@ export default function SliderPage() {
                 navigateTo(idx);
               }}
             >
-              <div className="w-full h-[2px] bg-[#2A2522]/20 mb-2 md:mb-3 rounded-sm overflow-hidden">
+              <div className="w-full h-[2px] bg-[#2A2522]/20 mb-1.5 sm:mb-2 md:mb-3 rounded-sm overflow-hidden">
                 <div
                   id={`progress-${idx}`}
                   className="h-full bg-[#2A2522] w-0 transition-all duration-100 ease-linear opacity-100"
                   style={{ width: idx === activeSlide ? "0%" : "0%" }}
                 />
               </div>
-              <div className="font-mono text-[9px] sm:text-[10px] lg:text-xs uppercase font-bold tracking-wider md:tracking-widest whitespace-normal break-words leading-tight">
+              <div className="text-[8px] sm:text-[10px] lg:text-xs uppercase font-bold tracking-wider md:tracking-widest truncate leading-tight">
                 {slide.title}
               </div>
             </div>

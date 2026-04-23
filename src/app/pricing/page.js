@@ -7,7 +7,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 export default function Pricing() {
   return (
     <div data-testid="pricing-page">
-      <section className="ed-container pt-16 md:pt-24 pb-16">
+      <section className="ed-container pt-16 md:pt-24 pb-16" data-aos="fade-up">
         <Heading 
            subtitle="Pricing"
            title='Clear pricing for every occasion, <em class="not-italic text-[#C8A97E]">Custom bookings available on request</em>.'
@@ -36,6 +36,8 @@ export default function Pricing() {
                 key={p.id}
                 data-testid={`pricing-card-${p.id}`}
                 className={`relative border p-10 flex flex-col ${base} ${p.highlighted ? "lg:scale-[1.03] shadow-xl z-10" : "z-0"}`}
+                data-aos="fade-up"
+                data-aos-delay={`${PRICING.indexOf(p) * 150}`}
               >
                 {p.highlighted && (
                   <div className="absolute -top-3 left-10 bg-[#2A2522] text-[#C8A97E] px-3 py-1 label-xs !text-[10px]">
@@ -79,7 +81,7 @@ export default function Pricing() {
         </div>
 
         {/* A-la-carte */}
-        <div className="mt-24 border-t border-[#2A2522]/15 pt-16" data-testid="alacarte">
+        <div className="mt-24 border-t border-[#2A2522]/15 pt-16" data-testid="alacarte" data-aos="fade-up">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-4">
               <Heading 

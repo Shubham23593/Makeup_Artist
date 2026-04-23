@@ -12,7 +12,14 @@ export async function GET(request) {
     const query = category ? { category } : {};
     const images = await SiteImage.find(query).sort({ displayOrder: 1, createdAt: -1 });
     
-    return NextResponse.json({ success: true, images });
+    return NextResponse.json(
+      { success: true, images },
+      {
+        headers: {
+          'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+        },
+      }
+    );
   } catch (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

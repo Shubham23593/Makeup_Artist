@@ -1,9 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
+import Image from "next/image";
 import { ArrowUpRight, Star } from "lucide-react";
 import axios from "axios";
 import { HERO_IMAGE, SERVICES, PORTFOLIO, STUDIO, ARTIST } from "@/lib/data";
 import { optimizeImage } from "@/lib/utils";
+import { useImageData } from "@/lib/ImageDataContext";
 import Heading from "@/components/Heading";
 import PrimaryButton from "@/components/PrimaryButton";
 import SliderPage from "@/components/CrazyComponents/tsx/SliderPage";
@@ -11,41 +13,33 @@ import SliderPage from "@/components/CrazyComponents/tsx/SliderPage";
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 
 function RecentWork() {
-  const [gallery, setGallery] = useState(PORTFOLIO);
+  const { images, loading } = useImageData();
 
-  useEffect(() => {
-    async function fetchPortfolio() {
-      try {
-        const res = await fetch("/api/images");
-        const data = await res.json();
-        if (data.success && data.images) {
-          const items = [];
-          data.images.forEach(img => {
-            const posMatch = img.category.match(/^Portfolio:\s+(.+?)\s+(\d+)$/);
-            if (posMatch) {
-              items.push({
-                id: img._id,
-                category: posMatch[1],
-                pos: parseInt(posMatch[2]),
-                image: img.imageUrl,
-                title: img.title || posMatch[1],
-              });
-            }
-          });
-          items.sort((a, b) => a.pos - b.pos);
-          if (items.length > 0) setGallery(items);
-        }
-      } catch (err) {}
-    }
-    fetchPortfolio();
-  }, []);
+  const gallery = useMemo(() => {
+    if (loading || !images || images.length === 0) return PORTFOLIO;
+    const items = [];
+    images.forEach(img => {
+      const posMatch = img.category.match(/^Portfolio:\s+(.+?)\s+(\d+)$/);
+      if (posMatch) {
+        items.push({
+          id: img._id,
+          category: posMatch[1],
+          pos: parseInt(posMatch[2]),
+          image: img.imageUrl,
+          title: img.title || posMatch[1],
+        });
+      }
+    });
+    items.sort((a, b) => a.pos - b.pos);
+    return items.length > 0 ? items : PORTFOLIO;
+  }, [images, loading]);
 
   // Pick up to 6 images for the grid
   const g = gallery;
   return (
     <section className="py-24 md:py-32" data-testid="featured-gallery">
       <div className="ed-container">
-        <div className="flex items-end justify-between mb-16">
+        <div className="flex items-end justify-between mb-16" data-aos="fade-up">
           <Heading 
              subtitle="02 — Portfolio"
              title="Our latest makeup work and transformations."
@@ -63,35 +57,35 @@ function RecentWork() {
 
         <div className="grid grid-cols-12 gap-4 md:gap-6">
           {g[0] && (
-            <div className="col-span-12 md:col-span-7 hover-zoom aspect-[4/3]">
-              <img src={optimizeImage(g[0].image, 800)} alt={g[0].title} className="w-full h-full object-cover" loading="lazy" />
+            <div className="col-span-12 md:col-span-7 hover-zoom aspect-[4/3] relative" data-aos="fade-up" data-aos-delay="100">
+              <Image src={optimizeImage(g[0].image, 800)} alt={g[0].title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 58vw" loading="lazy" />
             </div>
           )}
           <div className="col-span-12 md:col-span-5 flex flex-col gap-4 md:gap-6">
             {g[1] && (
-              <div className="hover-zoom flex-1 aspect-[3/3]">
-                <img src={optimizeImage(g[1].image, 600)} alt={g[1].title} className="w-full h-full object-cover" loading="lazy" />
+              <div className="hover-zoom flex-1 aspect-[3/3] relative" data-aos="fade-up" data-aos-delay="200">
+                <Image src={optimizeImage(g[1].image, 600)} alt={g[1].title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 42vw" loading="lazy" />
               </div>
             )}
             {g[2] && (
-              <div className="hover-zoom flex-1 aspect-[4/3]">
-                <img src={optimizeImage(g[2].image, 600)} alt={g[2].title} className="w-full h-full object-cover" loading="lazy" />
+              <div className="hover-zoom flex-1 aspect-[4/3] relative" data-aos="fade-up" data-aos-delay="300">
+                <Image src={optimizeImage(g[2].image, 600)} alt={g[2].title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 42vw" loading="lazy" />
               </div>
             )}
           </div>
           {g[3] && (
-            <div className="col-span-6 md:col-span-4 hover-zoom aspect-[3/4]">
-              <img src={optimizeImage(g[3].image, 500)} alt={g[3].title} className="w-full h-full object-cover" loading="lazy" />
+            <div className="col-span-6 md:col-span-4 hover-zoom aspect-[3/4] relative">
+              <Image src={optimizeImage(g[3].image, 500)} alt={g[3].title} fill className="object-cover" sizes="(max-width: 768px) 50vw, 33vw" loading="lazy" />
             </div>
           )}
           {g[4] && (
-            <div className="col-span-6 md:col-span-4 hover-zoom aspect-[3/4]">
-              <img src={optimizeImage(g[4].image, 500)} alt={g[4].title} className="w-full h-full object-cover" loading="lazy" />
+            <div className="col-span-6 md:col-span-4 hover-zoom aspect-[3/4] relative">
+              <Image src={optimizeImage(g[4].image, 500)} alt={g[4].title} fill className="object-cover" sizes="(max-width: 768px) 50vw, 33vw" loading="lazy" />
             </div>
           )}
           {g[5] && (
-            <div className="col-span-12 md:col-span-4 hover-zoom aspect-[3/4]">
-              <img src={optimizeImage(g[5].image, 500)} alt={g[5].title} className="w-full h-full object-cover" loading="lazy" />
+            <div className="col-span-12 md:col-span-4 hover-zoom aspect-[3/4] relative">
+              <Image src={optimizeImage(g[5].image, 500)} alt={g[5].title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" loading="lazy" />
             </div>
           )}
         </div>
@@ -109,7 +103,19 @@ function RecentWork() {
 
 export default function Home() {
   const [testimonials, setTestimonials] = useState([]);
-  const [servicesData, setServicesData] = useState(SERVICES);
+  const { images, loading } = useImageData();
+
+  const servicesData = useMemo(() => {
+    if (loading || !images || images.length === 0) return SERVICES;
+    const updated = SERVICES.map(service => {
+      const dynamicImg = images.find(img => img.category === `Service: ${service.title}`);
+      if (dynamicImg) {
+        return { ...service, image: dynamicImg.imageUrl };
+      }
+      return service;
+    });
+    return updated;
+  }, [images, loading]);
 
   useEffect(() => {
     axios.get(`${API}/testimonials`).then((r) => setTestimonials(r.data)).catch(() => {
@@ -144,25 +150,6 @@ export default function Home() {
         }
       ]);
     });
-
-    // Fetch dynamic service images
-    async function fetchServiceImages() {
-      try {
-        const res = await fetch("/api/images");
-        const data = await res.json();
-        if (data.success && data.images.length > 0) {
-          const updated = SERVICES.map(service => {
-            const dynamicImg = data.images.find(img => img.category === `Service: ${service.title}`);
-            if (dynamicImg) {
-              return { ...service, image: dynamicImg.imageUrl };
-            }
-            return service;
-          });
-          setServicesData(updated);
-        }
-      } catch (err) {}
-    }
-    fetchServiceImages();
   }, []);
 
   return (
@@ -175,7 +162,7 @@ export default function Home() {
       {/* SERVICES PREVIEW */}
       <section className="bg-[#F3EBE5]/40 py-24 md:py-32" data-testid="services-preview-section">
         <div className="ed-container">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16" data-aos="fade-up">
             <Heading 
                subtitle="01 — Our Services" 
                title="Six services, one goal — to make you look confident and beautiful." 
@@ -194,9 +181,11 @@ export default function Home() {
                 key={s.slug}
                 testId={`service-card-${s.slug}`}
                 className="!bg-transparent !p-0 !border-0 group bg-white border border-[#2A2522]/10 hover:border-[#C8A97E] transition-colors flex flex-col items-start block text-left !normal-case tracking-normal focus:!bg-transparent focus:!text-[#2A2522]"
+                data-aos="fade-up"
+                data-aos-delay={`${i * 100}`}
               >
-                <div className="hover-zoom aspect-[3/4] w-full bg-[#F3EBE5]">
-                  {s.image && <img src={s.image} alt={s.title} className="w-full h-full object-cover" />}
+                <div className="hover-zoom aspect-[3/4] w-full bg-[#F3EBE5] relative">
+                  {s.image && <Image src={s.image} alt={s.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" loading="lazy" />}
                 </div>
                 <div className="p-6 flex items-start justify-between w-full border border-t-0 border-[#2A2522]/10 group-hover:border-[#C8A97E]">
                   <div>
@@ -221,7 +210,7 @@ export default function Home() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
           {/* LEFT CONTENT */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-4" data-aos="fade-right">
             <Heading 
               subtitle="03 — Testimonials"
               subtitleClassName="!text-[#C8A97E]"
@@ -244,7 +233,7 @@ export default function Home() {
           </div>
 
           {/* RIGHT GRID */}
-          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6" data-aos="fade-left" data-aos-delay="200">
 
             {testimonials.length > 0 ? (
               testimonials.slice(0, 4).map((t) => (
@@ -288,7 +277,7 @@ export default function Home() {
       {/* CTA */}
       <section className="py-24 md:py-32" data-testid="home-cta-section">
         <div className="ed-container">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-end border-t border-[#2A2522]/15 pt-16">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-end border-t border-[#2A2522]/15 pt-16" data-aos="fade-up">
             <div className="md:col-span-7">
               <Heading 
                  title="Book your makeup appointment."
