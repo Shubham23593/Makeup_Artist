@@ -10,7 +10,8 @@ export default function AdminLayout({ children }) {
   const router = useRouter();
   const isLoginPage = pathname === '/admin/login';
 
-  const [sidebarOpen, setSidebarOpen] = React.useState(true);
+  // Mobile ke liye default 'false' rakha hai, desktop pe Tailwind classes se apne aap open rahega
+  const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   if (isLoginPage) return <div className="min-h-screen bg-gray-50">{children}</div>;
 
@@ -31,17 +32,37 @@ export default function AdminLayout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 flex font-sans">
+    <div className="min-h-screen bg-gray-100 flex font-sans overflow-hidden">
+      
+      {/* Mobile Overlay - Jab sidebar khulega tab piche dark background aayega */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className={`bg-[#2A2522] text-[#FBF9F6] w-64 flex-shrink-0 transition-transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full fixed h-full z-50'}`}>
+      <aside 
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-[#2A2522] text-[#FBF9F6] flex flex-col transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
         <div className="p-6 border-b border-gray-700 font-serif text-xl tracking-widest uppercase">
           Deepali <br/><span className="text-[#C8A97E] text-xs">Admin Panel</span>
         </div>
-        <nav className="p-4 space-y-2 flex-grow">
+        <nav className="p-4 space-y-2 flex-grow overflow-y-auto">
           {navItems.map((item) => {
             const active = pathname.startsWith(item.href);
             return (
-              <Link key={item.href} href={item.href} className={`flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${active ? 'bg-[#C8A97E] text-[#2A2522]' : 'hover:bg-gray-800'}`}>
+              <Link 
+                key={item.href} 
+                href={item.href} 
+                onClick={() => setSidebarOpen(false)} // Mobile me click karte hi sidebar close
+                className={`flex items-center gap-3 px-4 py-3 rounded-md transition-colors ${
+                  active ? 'bg-[#C8A97E] text-[#2A2522]' : 'hover:bg-gray-800'
+                }`}
+              >
                 <item.icon size={18} />
                 <span className="font-medium tracking-wide text-sm uppercase">{item.label}</span>
               </Link>
@@ -49,7 +70,10 @@ export default function AdminLayout({ children }) {
           })}
         </nav>
         <div className="p-4 mt-auto">
-          <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 w-full rounded-md text-red-400 hover:bg-gray-800 transition-colors">
+          <button 
+            onClick={handleLogout} 
+            className="flex items-center gap-3 px-4 py-3 w-full rounded-md text-red-400 hover:bg-gray-800 transition-colors"
+          >
             <LogOut size={18} />
             <span className="font-medium tracking-wide text-sm uppercase">Logout</span>
           </button>
@@ -57,14 +81,17 @@ export default function AdminLayout({ children }) {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className="bg-white shadow-sm h-16 flex items-center px-4 md:px-8">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="mr-4 lg:hidden">
+      <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
+        <header className="bg-white shadow-sm h-16 flex items-center px-4 md:px-8 shrink-0">
+          <button 
+            onClick={() => setSidebarOpen(true)} 
+            className="mr-4 md:hidden text-gray-700 hover:text-black transition-colors"
+          >
             <Menu size={24} />
           </button>
           <div className="text-sm text-gray-500 uppercase tracking-widest font-medium">Dashboard</div>
         </header>
-        <main className="flex-1 p-4 md:p-8 overflow-auto bg-gray-50">
+        <main className="flex-1 p-4 md:p-8 overflow-y-auto bg-gray-50">
           {children}
         </main>
       </div>

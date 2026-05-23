@@ -44,7 +44,7 @@ export default function AdminDashboard() {
     fetchStats();
   }, []);
 
-  if (loading) return <div>Loading Analytics...</div>;
+  if (loading) return <div className="p-4 md:p-8 text-gray-500">Loading Analytics...</div>;
 
   const statCards = [
     { label: "Total Bookings", value: stats.totalBookings, icon: Users, color: "text-blue-500" },
@@ -54,29 +54,42 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
+      {/* Header Area */}
       <div>
-        <h1 className="text-3xl font-serif text-[#2A2522]">Analytics Overview</h1>
-        <p className="text-gray-500 mt-2">Welcome back to the Deepali Makeup Artist control center.</p>
+        <h1 className="text-2xl md:text-3xl font-serif text-[#2A2522]">Analytics Overview</h1>
+        <p className="text-sm md:text-base text-gray-500 mt-1 md:mt-2">Welcome back to the Deepali Makeup Artist control center.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         {statCards.map((stat, i) => (
-          <div key={i} className="bg-white p-6 shadow-sm border border-gray-100 flex items-center gap-6">
-            <div className={`p-4 bg-gray-50 rounded-full ${stat.color}`}>
-              <stat.icon size={24} />
+          <div key={i} className="bg-white p-4 md:p-6 shadow-sm border border-gray-100 flex items-center gap-4 md:gap-6 overflow-hidden rounded-md md:rounded-none">
+            
+            {/* Icon Container */}
+            <div className={`p-3 md:p-4 bg-gray-50 rounded-full flex-shrink-0 ${stat.color}`}>
+              <stat.icon className="w-5 h-5 md:w-6 md:h-6" />
             </div>
-            <div>
-              <p className="text-sm text-gray-500 uppercase tracking-widest font-medium mb-1">{stat.label}</p>
-              <h2 className="text-3xl font-serif font-semibold">{stat.value}</h2>
+            
+            {/* Text Container */}
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest font-medium mb-1 truncate">
+                {stat.label}
+              </p>
+              <h2 className="text-xl md:text-3xl font-serif font-semibold truncate">
+                {stat.value}
+              </h2>
             </div>
+
           </div>
         ))}
       </div>
 
       {/* Chart container dummy placeholder */}
-      <div className="bg-white p-6 shadow-sm border border-gray-100 mt-8 h-96 flex items-center justify-center">
-        <p className="text-gray-400 font-serif text-xl italic">Growth Chart & Interactive Graphs Coming Soon</p>
+      <div className="bg-white p-4 md:p-6 shadow-sm border border-gray-100 mt-6 md:mt-8 h-64 md:h-96 flex items-center justify-center text-center rounded-md md:rounded-none">
+        <p className="text-gray-400 font-serif text-lg md:text-xl italic px-4">
+          Growth Chart & Interactive Graphs Coming Soon
+        </p>
       </div>
     </div>
   );
