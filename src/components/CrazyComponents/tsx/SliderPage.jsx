@@ -372,7 +372,7 @@ export default function SliderPage() {
   const mainImageRef = useRef(null);
   const contentRef = useRef(null);
   const parallaxRef = useRef(null);
-  const [loaded, setLoaded] = useState(false);
+  const [loaded, setLoaded] = useState(true);
   const [activeSlide, setActiveSlide] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [slides, setSlides] = useState([]);
@@ -887,7 +887,7 @@ export default function SliderPage() {
       `}</style>
 
       {/* ── Preloader ─────────────────────────────────────────────── */}
-      {!loaded && <Preloader onLoadComplete={() => setLoaded(true)} />}
+      {/* Preloader removed for faster loading */}
 
       {/* ── Ambient Background Blobs ──────────────────────────────── */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">

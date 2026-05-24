@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState, useMemo } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, Star } from "lucide-react";
 import axios from "axios";
@@ -175,12 +176,11 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {servicesData.slice(0, 6).map((s, i) => (
-              <PrimaryButton
-                as="link"
+              <Link
                 href="/services"
                 key={s.slug}
-                testId={`service-card-${s.slug}`}
-                className="!bg-transparent !p-0 !border-0 group bg-white border border-[#2A2522]/10 hover:border-[#C8A97E] transition-colors flex flex-col items-start block text-left !normal-case tracking-normal focus:!bg-transparent focus:!text-[#2A2522]"
+                data-testid={`service-card-${s.slug}`}
+                className="group bg-white border border-[#2A2522]/10 hover:border-[#C8A97E] transition-colors flex flex-col items-start block text-left tracking-normal overflow-hidden"
                 data-aos="fade-up"
                 data-aos-delay={`${i * 100}`}
               >
@@ -195,7 +195,7 @@ export default function Home() {
                   </div>
                   <ArrowUpRight size={18} className="text-[#2A2522] group-hover:text-[#C8A97E] transition-colors mt-2" />
                 </div>
-              </PrimaryButton>
+              </Link>
             ))}
           </div>
         </div>
@@ -222,14 +222,13 @@ export default function Home() {
               Real experiences from our happy clients who trusted us for their special moments.
             </p>
 
-            <PrimaryButton 
-              as="link" 
+            <Link 
               href="/testimonials" 
-              className="!bg-transparent !border-0 !p-0 !text-[#C8A97E] inline-flex items-center gap-2 mt-8 text-xs tracking-[0.2em] uppercase hover:gap-3 transition-all" 
-              testId="testimonials-read-more-btn"
+              className="text-[#C8A97E] inline-flex items-center gap-2 mt-8 text-xs tracking-[0.2em] uppercase hover:gap-3 transition-all" 
+              data-testid="testimonials-read-more-btn"
             >
               View All Reviews <ArrowUpRight size={14} />
-            </PrimaryButton>
+            </Link>
           </div>
 
           {/* RIGHT GRID */}
